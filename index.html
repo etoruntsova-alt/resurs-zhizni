@@ -191,19 +191,20 @@
       <li class="факт"><b>Постоянное решение новых задач и развитие в разных направлениях</b><p>позволяют двигаться выверенными шагами и уважать чужой темп, не навязывая свой</p></li>
     </ul>
     <ul class="документы">
-      <li class="документ"><svg class="иконка" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <li class="документ документ--скан"><button type="button" class="документ__кнопка" data-скан="img/diplom-nutriciologa.jpg" data-подпись="Диплом нутрициолога (2023)"><svg class="иконка" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <circle cx="12" cy="9" r="6"/>
   <path d="M8.5 14l-2 7 5.5-3 5.5 3-2-7"/>
-</svg><span>Диплом нутрициолога (2023)</span></li>
-      <li class="документ"><svg class="иконка" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+</svg><span>Диплом нутрициолога (2023)</span><em class="документ__открыть">Открыть</em></button></li>
+      <li class="документ документ--скан"><button type="button" class="документ__кнопка" data-скан="img/sertifikat-rudn.jpg" data-подпись="Сертификат РУДН «Основы нутрициологии» (2025)"><svg class="иконка" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <path d="M7 3h7l5 5v13H7z"/>
   <path d="M14 3v5h5M10 13h5M10 17h5"/>
-</svg><span>Сертификат Российского университета дружбы народов «Основы нутрициологии» (2025)</span></li>
-      <li class="документ"><svg class="иконка" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+</svg><span>Сертификат Российского университета дружбы народов «Основы нутрициологии» (2025)</span><em class="документ__открыть">Открыть</em></button></li>
+      <li class="документ документ--скан"><button type="button" class="документ__кнопка" data-скан="img/sertifikat-nutrilogic.jpg" data-подпись="Сертификат Nutrilogic.Lite"><svg class="иконка" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <path d="M7 3h7l5 5v13H7z"/>
   <path d="M14 3v5h5M10 13h5M10 17h5"/>
-</svg><span>Сертификат Nutrilogic.Lite</span></li>
+</svg><span>Сертификат Nutrilogic.Lite</span><em class="документ__открыть">Открыть</em></button></li>
     </ul>
+    <p class="документы__примечание">Серия диплома закрыта. Полную копию пришлю в <a href="https://max.ru/u/f9LHodD0cOIK4QMBCIWEHFbWmzZUzGsqDQvWKVm6bM0Fuh3gslNf9A-q06k" target="_blank" rel="noopener">личные сообщения</a>.</p>
   </div>
 </div>
 </section>
@@ -342,6 +343,123 @@
   </div>
 </div>
 </section>
+
+<style>
+.окно-круга { position: fixed; inset: 0; z-index: 1000; display: none; flex-direction: column; background: var(--цвет-тёмный-фон); }
+.окно-круга--открыто { display: flex; }
+.окно-круга__бар { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px clamp(14px, 3vw, 28px); background: var(--цвет-тёмный-фон-2); border-bottom: 1px solid color-mix(in srgb, var(--цвет-тёплый) 28%, transparent); }
+.окно-круга__бар button { font: inherit; font-weight: 600; cursor: pointer; color: var(--цвет-тёмный-текст); background: transparent; border: 1px solid var(--цвет-тёплый); border-radius: var(--кнопка-радиус); padding: 8px 16px; min-height: 44px; }
+.окно-круга__бар button:hover, .окно-круга__бар button:focus-visible { background: color-mix(in srgb, var(--цвет-тёплый) 16%, transparent); }
+.окно-круга iframe { flex: 1; width: 100%; border: 0; background: var(--цвет-тёмный-фон); }
+body.круг-открыт { overflow: hidden; }
+</style>
+<div class="окно-круга" id="окно-круга" role="dialog" aria-modal="true" aria-label="Круг ресурсов" hidden>
+  <div class="окно-круга__бар">
+    <button type="button" id="окно-круга-назад">← Вернуться на сайт</button>
+    <button type="button" id="окно-круга-закрыть" aria-label="Закрыть">✕</button>
+  </div>
+</div>
+<script>
+(function () {
+  var окно = document.getElementById("окно-круга");
+  if (!окно || !window.history || !window.postMessage) { return; }
+  var рамка = null, вернутьФокус = null;
+
+  function открыть(e) {
+    e.preventDefault();
+    вернутьФокус = e.currentTarget;
+    if (!рамка) {
+      рамка = document.createElement("iframe");
+      рамка.title = "Круг ресурсов";
+      рамка.src = "круг.html?встроено=1";
+      окно.appendChild(рамка);
+    }
+    окно.hidden = false; окно.classList.add("окно-круга--открыто");
+    document.body.classList.add("круг-открыт");
+    try { history.pushState({ круг: 1 }, "", location.href); } catch (_) {}
+    document.getElementById("окно-круга-закрыть").focus();
+  }
+
+  function скрыть(якорь) {
+    if (!окно.classList.contains("окно-круга--открыто")) { return; }
+    окно.classList.remove("окно-круга--открыто"); окно.hidden = true;
+    document.body.classList.remove("круг-открыт");
+    if (якорь) {
+      var цель = document.querySelector(якорь);
+      if (цель) { цель.scrollIntoView(); }
+    } else if (вернутьФокус) { try { вернутьФокус.focus({ preventScroll: true }); } catch (_) {} }
+  }
+
+  // «Назад» на телефоне и кнопки окна: закрываем окно, сайт остаётся на месте.
+  var ждётЯкорь = null;
+  function закрыть(якорь) {
+    if (history.state && history.state.круг) { ждётЯкорь = якорь || null; history.back(); }
+    else { скрыть(якорь); }
+  }
+  window.addEventListener("popstate", function () { var я = ждётЯкорь; ждётЯкорь = null; скрыть(я); });
+  document.getElementById("окно-круга-назад").addEventListener("click", function () { закрыть(); });
+  document.getElementById("окно-круга-закрыть").addEventListener("click", function () { закрыть(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") { закрыть(); } });
+
+  // Сообщения из самой страницы круга («Вернуться на сайт», «Начать с питания»).
+  window.addEventListener("message", function (e) {
+    if (e.origin !== location.origin || !e.data || e.data.тип !== "закрыть-круг") { return; }
+    закрыть(e.data.якорь && /^#[^\s]+$/.test(e.data.якорь) ? e.data.якорь : null);
+  });
+
+  var ссылки = document.querySelectorAll('a[href="круг.html"]');
+  for (var i = 0; i < ссылки.length; i++) { ссылки[i].addEventListener("click", открыть); }
+})();
+</script>
+
+<style>
+  .окно-скана { position: fixed; inset: 0; z-index: 1000; display: none; flex-direction: column; background: rgba(2, 23, 18, .94); }
+  .окно-скана--открыто { display: flex; }
+  .окно-скана__бар { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px clamp(14px, 3vw, 28px); color: var(--цвет-тёмный-текст); }
+  .окно-скана__бар button { font: inherit; font-weight: 600; cursor: pointer; color: var(--цвет-тёмный-текст); background: transparent; border: 1px solid var(--цвет-тёплый); border-radius: var(--кнопка-радиус); padding: 8px 16px; min-height: 44px; }
+  .окно-скана__поле { flex: 1; overflow: auto; display: flex; align-items: flex-start; justify-content: center; padding: 0 clamp(8px, 3vw, 28px) 24px; }
+  .окно-скана__поле img { max-width: 100%; max-height: calc(100vh - 90px); width: auto; height: auto; object-fit: contain; border-radius: 6px; background: var(--цвет-фон-карточки); }
+</style>
+
+<script>
+(function () {
+  var кнопки = document.querySelectorAll(".документ__кнопка");
+  if (!кнопки.length) { return; }
+  var окно = document.createElement("div");
+  окно.className = "окно-скана"; окно.hidden = true;
+  окно.setAttribute("role", "dialog"); окно.setAttribute("aria-modal", "true");
+  окно.innerHTML = '<div class="окно-скана__бар"><span class="окно-скана__подпись"></span><button type="button" aria-label="Закрыть">✕ Закрыть</button></div>' +
+                   '<div class="окно-скана__поле"><img alt="" loading="lazy" decoding="async"></div>';
+  document.body.appendChild(окно);
+  var картинка = окно.querySelector("img"), подпись = окно.querySelector(".окно-скана__подпись");
+  var закрыватель = окно.querySelector("button"), откуда = null;
+
+  function открыть(e) {
+    откуда = e.currentTarget;
+    картинка.src = откуда.getAttribute("data-скан");
+    картинка.alt = откуда.getAttribute("data-подпись") || "Документ";
+    подпись.textContent = картинка.alt;
+    окно.hidden = false; окно.classList.add("окно-скана--открыто");
+    document.body.style.overflow = "hidden";
+    try { history.pushState({ скан: 1 }, "", location.href); } catch (_) {}
+    закрыватель.focus();
+  }
+  function скрыть() {
+    if (!окно.classList.contains("окно-скана--открыто")) { return; }
+    окно.classList.remove("окно-скана--открыто"); окно.hidden = true;
+    document.body.style.overflow = "";
+    if (откуда) { try { откуда.focus({ preventScroll: true }); } catch (_) {} }
+  }
+  function закрыть() {
+    if (history.state && history.state.скан) { history.back(); } else { скрыть(); }
+  }
+  window.addEventListener("popstate", скрыть);
+  закрыватель.addEventListener("click", закрыть);
+  окно.addEventListener("click", function (e) { if (e.target === окно || e.target.classList.contains("окно-скана__поле")) { закрыть(); } });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") { закрыть(); } });
+  for (var i = 0; i < кнопки.length; i++) { кнопки[i].addEventListener("click", открыть); }
+})();
+</script>
 <div class="липкая-кнопка липкая-кнопка--тёмная"><a class="кнопка кнопка--главная" href="круг.html">Увидеть свои ресурсы</a></div>
 <script>
 (function () {

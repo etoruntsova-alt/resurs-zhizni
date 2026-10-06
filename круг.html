@@ -101,6 +101,7 @@
 .круг h2, .круг h3 { font-family: var(--шрифт-заголовков); margin: 0; }
 .круг a:focus-visible, .круг button:focus-visible, .круг input:focus-visible { outline: 3px solid var(--цвет-тёплый); outline-offset: 3px; }
 .круг-шапка { padding-top: clamp(14px, 2.4vw, 34px); }
+html.встроено .круг-шапка { display: none; }
 .круг .шапка { height: auto; justify-content: space-between; gap: 1rem; padding: 0; }
 .круг .шапка__лого { white-space: normal; line-height: 1.25; font-size: var(--кегль-мелкий); }
 .круг .шапка__назад { color: var(--цвет-тёплый); font-size: var(--кегль-мелкий); font-weight: 600; white-space: nowrap; }
@@ -721,8 +722,20 @@
   $("скачать-png").addEventListener("click", скачатьPNG);
   $("скачать-pdf").addEventListener("click", скачатьPDF);
   // Назад на страницу сайта, с которой человек пришёл; пришёл не с сайта (ссылка, закладка) — на главную.
+  var встроено = window.parent !== window && /(?:^|[?&])встроено=1(?:&|$)/.test(decodeURIComponent(location.search));
+  if (встроено) {
+    document.documentElement.classList.add("встроено");
+    // Ссылки на разделы сайта из окна: закрыть окно и показать нужное место сайта.
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest('a[href^="index.html#"]');
+      if (!a) { return; }
+      e.preventDefault();
+      window.parent.postMessage({ тип: "закрыть-круг", якорь: a.getAttribute("href").slice("index.html".length) }, location.origin);
+    });
+  }
   function вернутьсяНаСайт(e) {
     e.preventDefault();
+    if (встроено) { window.parent.postMessage({ тип: "закрыть-круг" }, location.origin); return; }
     var пришёлССайта = false;
     try { пришёлССайта = document.referrer && new URL(document.referrer).origin === location.origin && history.length > 1; } catch (_) {}
     if (пришёлССайта) history.back(); else location.href = "index.html";
