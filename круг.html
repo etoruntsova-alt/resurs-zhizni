@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Круг ресурсов — Эльвира Торунцова</title>
+<meta name="description" content="Восемь вопросов о ресурсах жизни. Бесплатно, ответы остаются только у вас.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Круг ресурсов — Эльвира Торунцова">
+<meta property="og:description" content="Восемь вопросов о ресурсах жизни. Бесплатно.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;600&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+:root {
+  --шрифт-заголовков: Montserrat, system-ui, sans-serif;
+  --шрифт-текста: Inter, -apple-system, 'Segoe UI', sans-serif;
+  --цвет-фон: #F8F3E8;  --цвет-фон-2: #F3ECDD;  --цвет-фон-карточки: #FFFDF8;
+  --цвет-текст: #12211D;  --цвет-текст-мягкий: #5C6B63;  --цвет-текст-тихий: #8A968F;
+  --цвет-акцент: #D5AB5D;  --цвет-акцент-тёмный: #A57726;  --цвет-акцент-яркий: #DDAB4E;  --цвет-акцент-глубже: #BA7E5F;  --цвет-акцент-маркер: #A57726;
+  --цвет-на-акценте: #052C23;  --цвет-линия: #D9CBA8;
+  --цвет-тёмный-фон: #052C23;  --цвет-тёмный-фон-2: #04221B;  --цвет-тёмный-текст: #F8F3E8;  --цвет-тёмный-фон-3: #031C16;  --цвет-тёмный-фон-4: #021712;
+  --цвет-тёплый: #F1D297;  --цвет-тёплый-мягкий: #E8D2A5;
+  --цвет-стекло: color-mix(in srgb, #052C23 86%, transparent);
+  --тень: 0 12px 34px color-mix(in srgb, #052C23 6%, transparent);
+  --тень-чип: 0 10px 30px color-mix(in srgb, #052C23 12%, transparent);
+  --тень-глубокая: 0 24px 60px color-mix(in srgb, #052C23 35%, transparent);
+  --тень-спутник: 0 30px 60px color-mix(in srgb, #052C23 70%, transparent);
+  --тень-плиты: 0 40px 100px color-mix(in srgb, #052C23 70%, transparent);
+  --кегль-h1: 30px;  --кегль-h2: clamp(28px, 4.5vw, 44px);
+  --кегль-текст: clamp(18px, 1.5vw, 22px);  --кегль-лид: clamp(19px, 1.9vw, 28px);
+  --кегль-мелкий: 17px;  --кегль-кикер: clamp(17px, 1.3vw, 20px);
+  --кегль-цифра: 30px;  --разрядка-кикера: .03em;
+  --отступ-секции: clamp(56px, 9vw, 120px);  --отступ-блока: clamp(16px, 2vw, 28px);
+  --отступ-секции-тихо: clamp(44px, 7vw, 94px);  --отступ-секции-громко: clamp(64px, 10.5vw, 140px);
+  --ширина: 1280px;  --ширина-колонки: 720px;  --радиус: 16px;  --радиус-малый: 8px;
+  --радиус-карточки: 18px;  --радиус-плитки: 22px;  --радиус-телефон: 46px;  --кнопка-радиус: 14px;
+  --радиус-модуля: 16px;  --нить: 2px;
+  --плавность: cubic-bezier(.2, .7, .2, 1);  --длительность: .25s;
+  --цвет-тёплый-тёмный: #8B6113;
+}
+@media (min-width: 900px) {
+  :root { --кегль-h1: clamp(40px, 4vw, 62px); }
+}
+:root, .светлый { --цвет-кнопки: #BA7E5F; --цвет-на-кнопке: #12211D; --цвет-кнопки-навёл: #C6957C; }
+.тёмный { --цвет-кнопки: #D5AB5D; --цвет-на-кнопке: #052C23; --цвет-кнопки-навёл: var(--цвет-акцент-тёмный); }
+
+</style>
+<script>
+(function () {
+  var ЭТАЛОН = 0.535;                  // очко Open Sans — текстовой гарнитуры утверждённых макетов
+  var ПОТОЛОК = 1.2, МЁРТВАЯ = 0.02;   // выше потолка расползается раскладка; ближе к единице не трогаем вовсе
+  var КОМПЬЮТЕР = "(min-width: 900px)";
+  var ТОКЕНЫ = ["--кегль-текст", "--кегль-лид", "--кегль-мелкий", "--кегль-кикер"];
+  var корень = document.documentElement;
+  var холст = document.createElement("canvas").getContext("2d");
+  var ждём = 0;
+
+  function мера(буква) { var м = холст.measureText(буква); return (м && м.actualBoundingBoxAscent) || 0; }
+
+  function применить() {
+    ждём = 0;
+    if (!холст) { return; }
+
+    for (var i = 0; i < ТОКЕНЫ.length; i++) { корень.style.removeProperty(ТОКЕНЫ[i]); }
+    var стиль = getComputedStyle(корень), стек = стиль.getPropertyValue("--шрифт-текста").trim();
+    if (!стек) { return; }
+    холст.font = "400 100px " + стек;
+
+    var очко = Math.max(мера("х"), мера("x")) / 100;
+    if (!(очко > 0)) { return; }
+    var k = Math.round(Math.min(ПОТОЛОК, Math.max(1, ЭТАЛОН / очко)) * 1000) / 1000;
+    if (k - 1 < МЁРТВАЯ || !matchMedia(КОМПЬЮТЕР).matches) { k = 1; }
+    корень.setAttribute("data-очко", очко.toFixed(3));      // чтобы проверка могла сказать числа вслух
+    корень.setAttribute("data-поправка", k.toFixed(3));
+    if (k === 1) { return; }
+    for (i = 0; i < ТОКЕНЫ.length; i++) {
+      var было = стиль.getPropertyValue(ТОКЕНЫ[i]).trim();
+      if (было) { корень.style.setProperty(ТОКЕНЫ[i], "calc((" + было + ") * " + k + ")"); }
+    }
+  }
+
+  применить();
+
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(применить); }
+
+  addEventListener("resize", function () { ждём = ждём || requestAnimationFrame(применить); });
+})();
+</script>
+<style>
+/* ===== Страница «Круг ресурсов»: свои стили поверх style.css ===== */
+.круг { --бегунок: 2.25rem; --дорожка: .75rem; --круг-подпись: var(--цвет-тёмный-текст);
+  --круг-подложка: color-mix(in srgb, var(--цвет-тёмный-текст) 12%, transparent);
+  --круг-шина: color-mix(in srgb, var(--цвет-тёмный-текст) 28%, transparent);
+  --круг-ступица: var(--цвет-тёмный-фон-3); --круг-ступица-линия: var(--цвет-тёплый);
+  --круг-опора: var(--цвет-тёмный-текст); --круг-рост: var(--цвет-акцент); --круг-внимание: var(--цвет-акцент-глубже);
+  --круг-кривая: var(--цвет-тёплый); }
+.круг h1 { margin: 0 0 .4em; font-family: var(--шрифт-заголовков); }
+.круг h2, .круг h3 { font-family: var(--шрифт-заголовков); margin: 0; }
+.круг a:focus-visible, .круг button:focus-visible, .круг input:focus-visible { outline: 3px solid var(--цвет-тёплый); outline-offset: 3px; }
+.круг-шапка { padding-top: clamp(14px, 2.4vw, 34px); }
+.круг .шапка { height: auto; justify-content: space-between; gap: 1rem; padding: 0; }
+.круг .шапка__лого { white-space: normal; line-height: 1.25; font-size: var(--кегль-мелкий); }
+.круг .шапка__назад { color: var(--цвет-тёплый); font-size: var(--кегль-мелкий); font-weight: 600; white-space: nowrap; }
+.круг-введение { padding: clamp(32px, 6vw, 72px) 0 var(--отступ-блока); display: grid; gap: 1.25rem 3rem; grid-template-columns: 1fr; }
+.круг-введение > * { margin: 0; }
+@media (min-width: 900px) { .круг-введение { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); grid-template-areas: "з з" "б ш" "п ш"; align-items: start; } .круг-введение h1 { grid-area: з; } .круг-введение .бесплатно { grid-area: б; } .круг-введение .пояснение { grid-area: п; max-width: 34rem; } .круг-введение .шкала-пояснение { padding: 1.25rem 1.5rem; border-left: var(--нить) solid var(--цвет-тёплый); background: color-mix(in srgb, var(--цвет-тёплый) 10%, transparent); font-size: var(--кегль-текст); color: var(--цвет-тёмный-текст); border-radius: 0 var(--радиус-карточки) var(--радиус-карточки) 0; display: grid; gap: .5rem; }.круг-введение .шкала-пояснение { grid-area: ш; align-self: start; } }
+.круг-введение .шкала-пояснение { padding: 1.25rem 1.5rem; border-left: var(--нить) solid var(--цвет-тёплый); background: color-mix(in srgb, var(--цвет-тёплый) 10%, transparent); font-size: var(--кегль-текст); color: var(--цвет-тёмный-текст); border-radius: 0 var(--радиус-карточки) var(--радиус-карточки) 0; display: grid; gap: .5rem; }
+.круг-введение .бесплатно { color: var(--цвет-тёплый); font-size: var(--кегль-лид); font-weight: 600; margin: 0 0 .6em; line-height: 1.35; }
+.круг-введение .пояснение { font-size: var(--кегль-текст); color: var(--цвет-тёмный-текст); opacity: .9; margin: 0; }
+.круг h1 { font-size: var(--кегль-h1); }
+
+.кв-список { display: grid; gap: var(--отступ-блока); grid-template-columns: 1fr; margin: var(--отступ-блока) 0; padding: 0; list-style: none; }
+@media (min-width: 900px) { .кв-список { grid-template-columns: 1fr 1fr; } }
+.кв { background: var(--цвет-фон-карточки); color: var(--цвет-текст); border-radius: var(--радиус-карточки);
+  padding: 1.25rem 1.25rem 1rem; box-shadow: var(--тень-глубокая); }
+.кв__сфера { font-size: var(--кегль-мелкий); font-weight: 600; color: var(--цвет-акцент-тёмный); letter-spacing: var(--разрядка-кикера); margin: 0 0 .25rem; }
+.кв__текст { font-size: var(--кегль-текст); margin: 0 0 1rem; line-height: 1.4; font-weight: 600; }
+.ползунок { -webkit-appearance: none; appearance: none; width: 100%; height: var(--бегунок); margin: 0; background: transparent; cursor: pointer; touch-action: pan-y; --v: 50%; }
+.ползунок::-webkit-slider-runnable-track { height: var(--дорожка); border-radius: var(--дорожка);
+  background: linear-gradient(90deg, var(--цвет-акцент) var(--v), var(--цвет-линия) var(--v)); }
+.ползунок::-moz-range-track { height: var(--дорожка); border-radius: var(--дорожка); background: var(--цвет-линия); }
+.ползунок::-moz-range-progress { height: var(--дорожка); border-radius: var(--дорожка); background: var(--цвет-акцент); }
+.ползунок::-webkit-slider-thumb { -webkit-appearance: none; width: var(--бегунок); height: var(--бегунок); border-radius: 50%;
+  margin-top: calc((var(--дорожка) - var(--бегунок)) / 2); background: var(--цвет-акцент); border: 3px solid var(--цвет-тёмный-фон); box-shadow: var(--тень-чип); }
+.ползунок::-moz-range-thumb { width: var(--бегунок); height: var(--бегунок); border-radius: 50%; background: var(--цвет-акцент); border: 3px solid var(--цвет-тёмный-фон); box-sizing: border-box; }
+.ползунок.не-тронут { --v: 0%; }
+.ползунок.не-тронут::-webkit-slider-thumb { background: var(--цвет-фон-карточки); border-color: var(--цвет-текст-мягкий); }
+.ползунок.не-тронут::-moz-range-thumb { background: var(--цвет-фон-карточки); border-color: var(--цвет-текст-мягкий); }
+.ползунок.не-тронут::-moz-range-progress { background: var(--цвет-линия); }
+.ползунок:focus-visible { outline-color: var(--цвет-акцент-тёмный); }
+.круг-введение .шкала-пояснение p { margin: 0; line-height: 1.45; }
+.круг-введение .шкала-пояснение__заг { font-family: var(--шрифт-заголовков); font-weight: 600; color: var(--цвет-тёплый); font-size: var(--кегль-лид); margin-bottom: .25rem !important; }
+.круг-введение .шкала-пояснение b { color: var(--цвет-тёплый); font-size: 1.15em; }
+.круг-введение .шкала-пояснение__мелко { font-size: var(--кегль-мелкий); opacity: .85; margin-top: .5rem !important; }
+.риски { display: flex; justify-content: space-between; padding: 0 calc(var(--бегунок) / 2); margin-top: .125rem; font-size: var(--кегль-мелкий); line-height: 1; color: var(--цвет-текст-мягкий); font-variant-numeric: tabular-nums; }
+.риски span { position: relative; width: 0; display: flex; justify-content: center; white-space: nowrap; padding-top: .5rem; }
+.риски span::before { content: ""; position: absolute; top: 0; left: 0; width: 1px; height: .35rem; background: var(--цвет-текст-тихий); }
+.риски span:first-child, .риски span:last-child, .риски span:nth-child(6) { font-weight: 700; color: var(--цвет-текст); }
+@media (max-width: 480px) { .риски span { font-size: .8125rem; } }
+.края { display: flex; justify-content: space-between; font-size: var(--кегль-мелкий); color: var(--цвет-текст-мягкий); margin-top: .25rem; }
+.кв__статус { font-size: var(--кегль-мелкий); color: var(--цвет-текст-мягкий); margin: .25rem 0 0; min-height: 1.5em; }
+
+.итог-панель { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; padding: 0 0 var(--отступ-секции-тихо); }
+.прогресс { flex: 1 1 14rem; }
+.прогресс__текст { font-size: var(--кегль-текст); font-weight: 600; margin: 0 0 .5rem; }
+.прогресс__полоса { height: .5rem; border-radius: .5rem; background: var(--круг-подложка); overflow: hidden; }
+.прогресс__полоса > span { display: block; height: 100%; width: 0; background: var(--цвет-тёплый); transition: width var(--длительность) var(--плавность); }
+.круг button.кнопка { font-family: var(--шрифт-текста); }
+.круг .кнопка:disabled { background: var(--круг-подложка); color: color-mix(in srgb, var(--цвет-тёмный-текст) 75%, transparent); cursor: not-allowed; box-shadow: none; border-color: var(--круг-шина); transform: none; }
+.круг .кнопка--контур { color: var(--цвет-тёмный-текст); border-color: var(--цвет-тёплый); }
+.круг .кнопка--контур:hover { background: color-mix(in srgb, var(--цвет-тёплый) 14%, transparent); }
+
+/* результат */
+.результат[hidden], .анкета[hidden] { display: none; }
+.результат { padding: var(--отступ-блока) 0 var(--отступ-секции); }
+.результат__заголовок { font-size: var(--кегль-h2); line-height: 1.15; margin: 0 0 .3em; }
+.результат__строка { font-size: var(--кегль-лид); color: var(--цвет-тёплый); margin: 0 0 var(--отступ-блока); }
+.круг-блок { display: grid; gap: var(--отступ-блока); grid-template-columns: 1fr; align-items: start; }
+.расшифровка { margin-top: 0; }
+@media (min-width: 900px) { .круг-блок > div:first-child { position: sticky; top: 1rem; } }
+@media (min-width: 900px) { .круг-блок { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); } }
+.круг-свг { display: block; width: calc(100% + 2 * var(--отступ-блока)); margin-inline: calc(-1 * var(--отступ-блока)); height: auto; }
+@media (min-width: 900px) { .круг-свг { width: 100%; margin-inline: 0; } }
+.круг-свг .кр-метка { opacity: 0; transition: opacity .8s ease .6s; }
+.круг-свг .кр-значение { font: 700 18px var(--шрифт-текста); opacity: 0; transition: opacity .8s ease .6s; pointer-events: none; }
+.круг-свг.показан .кр-метка, .круг-свг.показан .кр-значение { opacity: 1; }
+.результат__заголовок:focus, .результат__заголовок:focus-visible { outline: none; }
+.круг-свг .кр-шкала { font: 700 15px var(--шрифт-текста); }
+.круг-свг .кр-заливка { transform-box: view-box; transform-origin: 320px 300px; transition: transform 1s var(--плавность); }
+.круг-свг .кр-кривая { opacity: 0; transition: opacity .8s ease .5s; }
+.круг-свг.показан .кр-кривая { opacity: 1; }
+.круг-свг .кр-подпись { fill: var(--круг-подпись); font: 400 17px var(--шрифт-заголовков); letter-spacing: .12em; opacity: .92; }
+.легенда { list-style: none; padding: 0; margin: 0 0 1rem; display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; font-size: var(--кегль-мелкий); }
+.легенда li { display: inline-flex; align-items: center; gap: .5rem; }
+.легенда i { width: 1rem; height: 1rem; border-radius: 50%; display: inline-block; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.цв-опора { background: var(--круг-опора); } .цв-рост { background: var(--круг-рост); } .цв-внимание { background: var(--круг-внимание); }
+
+.расшифровка { display: grid; gap: var(--отступ-блока); }
+.группа { background: var(--цвет-фон-карточки); color: var(--цвет-текст); border-radius: var(--радиус-карточки); padding: 1.5rem; box-shadow: var(--тень-глубокая); }
+.группа h3 { font-size: var(--кегль-лид); margin-bottom: 1rem; }
+.группа--опора h3 { color: var(--цвет-тёмный-фон); } .группа--рост h3 { color: var(--цвет-акцент-тёмный); } .группа--внимание h3 { color: var(--цвет-тёплый-тёмный); }
+.группа ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+.группа li { border-left: 4px solid var(--цвет-акцент); padding-left: 1rem; }
+.группа--опора li { border-left-color: var(--цвет-тёмный-фон); } .группа--внимание li { border-left-color: var(--цвет-акцент-глубже); }
+.группа li b { display: block; font-family: var(--шрифт-заголовков); margin-bottom: .2rem; }
+.группа li p { margin: 0; font-size: var(--кегль-текст); }
+.скачать { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: var(--отступ-секции-тихо); }
+
+.направления { margin-top: var(--отступ-секции); }
+.направления h2 { font-size: var(--кегль-h2); margin-bottom: .3em; }
+.направления__лид { font-size: var(--кегль-лид); margin: 0 0 var(--отступ-блока); opacity: .9; }
+.нк-ряд { display: grid; gap: var(--отступ-блока); grid-template-columns: 1fr; }
+@media (min-width: 900px) { .нк-ряд { grid-template-columns: repeat(3, 1fr); } }
+.нк { background: var(--цвет-фон-карточки); color: var(--цвет-текст); border-radius: var(--радиус-карточки); padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;
+  border: 2px solid transparent; box-shadow: var(--тень); }
+.нк.подсвечена { border-color: var(--цвет-акцент); box-shadow: 0 0 0 .25rem color-mix(in srgb, var(--цвет-акцент) 35%, transparent), var(--тень-глубокая); }
+.нк__метка { font-size: var(--кегль-мелкий); font-weight: 600; color: var(--цвет-тёплый-тёмный); margin: 0; }
+.нк h3 { font-size: var(--кегль-лид); color: var(--цвет-текст); }
+.нк__сферы { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+.нк__сферы li { font-size: var(--кегль-мелкий); }
+.нк__сферы .полоска { height: .5rem; border-radius: .5rem; background: var(--цвет-линия); margin-top: .25rem; overflow: hidden; }
+.нк__сферы .полоска span { display: block; height: 100%; border-radius: .5rem; }
+.полоска .пол-опора { background: var(--цвет-тёмный-фон); } .полоска .пол-рост { background: var(--цвет-акцент); } .полоска .пол-внимание { background: var(--цвет-акцент-глубже); }
+.нк__польза { margin: 0; font-size: var(--кегль-текст); flex: 1; }
+.нк .кнопка { background: var(--цвет-тёмный-фон); color: var(--цвет-тёмный-текст); text-align: center; }
+.нк.подсвечена .кнопка { background: var(--цвет-кнопки); color: var(--цвет-на-кнопке); }
+.нк .кнопка:hover { background: var(--цвет-тёмный-фон-3); }
+.нк.подсвечена .кнопка:hover { background: var(--цвет-кнопки-навёл); }
+.после-карточек { margin: var(--отступ-блока) 0 0; font-size: var(--кегль-текст); }
+.после-карточек a { color: var(--цвет-тёплый); font-weight: 600; }
+.изменить { margin-top: var(--отступ-секции-тихо); }
+
+.круг-подвал { padding: 2rem 0; font-size: var(--кегль-мелкий); opacity: .85; }
+.только-печать { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .круг-свг .кр-заливка, .круг-свг .кр-кривая, .прогресс__полоса > span { transition: none; }
+  .круг-свг .кр-кривая { opacity: 1; }
+}
+@media print {
+  @page { margin: 14mm; }
+  body, .тёмный { background: #fff !important; color: #000 !important; }
+  .круг { --круг-подпись: var(--цвет-текст); --круг-подложка: color-mix(in srgb, var(--цвет-текст) 10%, transparent);
+    --круг-шина: color-mix(in srgb, var(--цвет-текст) 30%, transparent); --круг-ступица: var(--цвет-фон-карточки);
+    --круг-ступица-линия: var(--цвет-акцент-тёмный); --круг-опора: var(--цвет-тёмный-фон); --круг-рост: var(--цвет-акцент);
+    --круг-внимание: var(--цвет-акцент-глубже); --круг-кривая: var(--цвет-акцент-тёмный); }
+  .круг-шапка, .введение, .анкета, .итог-панель, .скачать, .направления, .изменить, .круг-подвал, .круг-введение, .результат__строка { display: none !important; }
+  .результат { padding: 0; color: var(--цвет-текст); }
+  .круг .результат__заголовок { color: var(--цвет-текст) !important; font-size: var(--кегль-лид); }
+  .круг-блок > div:first-child { position: static !important; }
+  .круг-свг, #круг-место { filter: none !important; box-shadow: none !important; }
+  .легенда { margin-top: 1rem; }
+  .результат[hidden] { display: none !important; }
+  .только-печать { display: block; font-size: var(--кегль-мелкий); margin: 0 0 1rem; }
+  .круг-блок { grid-template-columns: 1fr; }
+  .круг-свг { width: 100%; margin: 0 auto; max-width: 150mm; }
+  .круг-свг .кр-подложка, .круг-свг .кр-заливка { stroke: #fff; }
+  .круг-свг .кр-заливка { transition: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .круг-свг .кр-кривая { opacity: 1; transition: none; }
+  .группа { box-shadow: none; border: 1px solid var(--цвет-линия); break-inside: avoid; }
+  .расшифровка { margin-top: 1rem; }
+}
+</style>
+
+</head>
+<body>
+<div class="круг">
+<section class="тёмный" id="экран-круг" style="min-height: 100vh">
+  <div class="блок__внутри">
+    <div class="круг-шапка">
+      <header class="шапка">
+        <a class="шапка__лого" href="index.html"><span>Ресурс жизни<span class="тд"> · </span><br>Эльвира Торунцова · нутрициолог</span></a>
+        <a class="шапка__назад" href="index.html">На главную</a>
+      </header>
+    </div>
+
+    <main>
+    <div class="круг-введение">
+      <h1>Круг ресурсов</h1>
+      <p class="бесплатно">Бесплатно.<br>Ответы никуда не отправляются и остаются только у вас</p>
+      <p class="пояснение">Восемь вопросов о ваших ресурсах. Подвиньте ползунок к числу, которое показывает, насколько полным вы сейчас ощущаете свой ресурс в этой сфере. Правильных и неправильных ответов нет.</p>
+      <aside class="шкала-пояснение" aria-label="Найдите свой уровень">
+        <p class="шкала-пояснение__заг">Найдите свой уровень</p>
+        <p><b>0</b> — этого сейчас нет совсем</p>
+        <p><b>10</b> — это есть полностью, в идеале</p>
+        <p class="шкала-пояснение__мелко">По каждому вопросу поставьте число, которое ближе всего к тому, как вы сейчас это ощущаете и осознаёте.</p>
+      </aside>
+    </div>
+
+    <div class="анкета" id="анкета">
+      <ol class="кв-список" id="кв-список"></ol>
+      <div class="итог-панель">
+        <div class="прогресс">
+          <p class="прогресс__текст" id="прогресс-текст" aria-live="polite">Отвечено 0 из 8</p>
+          <div class="прогресс__полоса" aria-hidden="true"><span id="прогресс-полоса"></span></div>
+        </div>
+        <button type="button" class="кнопка кнопка--главная" id="собрать" disabled>Собрать мой круг</button>
+      </div>
+    </div>
+
+    <div class="результат" id="результат" hidden>
+      <p class="только-печать">Круг ресурсов · Эльвира Торунцова, «Ресурс жизни»</p>
+      <h2 class="результат__заголовок" id="р-заголовок" tabindex="-1"></h2>
+      <p class="результат__строка">Вот что вы сами про себя ответили</p>
+      <div class="круг-блок">
+        <div>
+          <div id="круг-место" role="img" aria-label="Круг ресурсов по восьми сферам"></div>
+          <ul class="легенда" id="легенда"></ul>
+        </div>
+        <div class="расшифровка" id="расшифровка"></div>
+      </div>
+
+      <div class="скачать">
+        <button type="button" class="кнопка кнопка--контур" id="скачать-png">Скачать круг картинкой (PNG)</button>
+        <button type="button" class="кнопка кнопка--контур" id="скачать-pdf">Скачать круг с расшифровкой (PDF)</button>
+      </div>
+
+      <div class="направления" id="направления">
+        <h2>С чего двигаться дальше</h2>
+        <p class="направления__лид" id="напр-лид">Три направления — выбирайте то, что откликается.</p>
+        <div class="нк-ряд" id="нк-ряд"></div>
+        <p class="после-карточек"><a href="#скачать-png" id="пока-никуда">Пока никуда — сохранить круг и вернуться позже</a></p>
+      </div>
+
+      <div class="изменить"><button type="button" class="кнопка кнопка--контур" id="изменить">Изменить ответы</button></div>
+    </div>
+    </main>
+    <div class="круг-подвал">Ресурс жизни · Эльвира Торунцова · нутрициолог</div>
+  </div>
+</section>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var MAX = "https://max.ru/u/f9LHodD0cOIK4QMBCIWEHFbWmzZUzGsqDQvWKVm6bM0Fuh3gslNf9A-q06k";
+  var СФЕРЫ = [
+    { имя: "Питание", кратко: "Питание", вопрос: "Насколько ваше питание поддерживает силы в обычный день?",
+      опора: "Ваше питание в обычный день поддерживает силы — это надёжный фундамент, на который можно опираться.",
+      внимание: "Питание сейчас даёт силам меньше, чем могло бы. С него удобно начать: небольшие шаги здесь хорошо видны.",
+      рост: "Питание в целом поддерживает вас, но запас сил можно сделать больше — здесь есть что укрепить." },
+    { имя: "Водный баланс", кратко: "Вода", вопрос: "Достаточно ли вы пьёте воды в течение дня?",
+      опора: "Вы пьёте воду в течение дня — маленькая привычка, которая работает на вас каждый день.",
+      внимание: "Воды в вашем дне пока не хватает или она приходит урывками. Привычку можно выстроить мягко, привязав к делам, которые уже есть в дне.",
+      рост: "Вода в вашем дне есть, но не всегда регулярно. Небольшая устойчивая привычка добавит ровности." },
+    { имя: "Движение", кратко: "Движение", вопрос: "Хватает ли в вашей неделе движения, которое радует?",
+      опора: "В вашей неделе есть движение, которое радует, — это источник сил и хорошего настроения.",
+      внимание: "Движения, которое радует, на неделе пока мало. Можно начать с того, что приятно именно вам, без нормативов и рекордов.",
+      рост: "Движение в вашей неделе есть — осталось добавить больше того, что радует именно вас." },
+    { имя: "Сон и восстановление", кратко: "Сон", вопрос: "Просыпаетесь ли вы отдохнувшей?",
+      опора: "Вы просыпаетесь отдохнувшей — значит, ночь возвращает силы. Этот режим стоит беречь.",
+      внимание: "Ночь пока не успевает вернуть вам силы. Часто помогает спокойный вечерний ритм. Если усталость держится долго, стоит обратиться к врачу.",
+      рост: "Сон в основном возвращает силы, но не всегда полностью. Ритм вечера и ночи можно настроить точнее." },
+    { имя: "Эмоциональный баланс", кратко: "Эмоции", вопрос: "Насколько вы спокойны и устойчивы в обычный день?",
+      опора: "В обычный день вы чувствуете себя спокойно и устойчиво — это внутренняя опора, которая помогает и в трудные дни.",
+      внимание: "Спокойствия и устойчивости в вашем дне пока не хватает. Так бывает, когда нагрузки много, а восстановления мало. Опору можно выстраивать шаг за шагом.",
+      рост: "В обычный день вы в основном спокойны, хотя устойчивость бывает неровной. Здесь опору стоит укреплять." },
+    { имя: "Связь с сообществом и поддержка", кратко: "Поддержка", вопрос: "Есть ли рядом люди, с которыми комфортно и которые вас поддерживают?",
+      опора: "Рядом есть люди, с которыми комфортно и которые вас поддерживают, — этот ресурс ничем не заменить.",
+      внимание: "Поддержки рядом пока меньше, чем хотелось бы. Круг людей можно расширять постепенно, начав с одного тёплого контакта.",
+      рост: "Поддержка рядом есть, хотя хотелось бы её чуть больше или чаще." },
+    { имя: "Энергия", кратко: "Энергия", вопрос: "Хватает ли вам сил на дела и на себя к вечеру?",
+      опора: "К вечеру вам хватает сил и на дела, и на себя — хороший знак, что нагрузка и восстановление уравновешены.",
+      внимание: "К вечеру сил на дела и на себя не остаётся. Присмотритесь к другим сферам круга: энергия складывается из них. Если упадок сил держится долго, стоит обратиться к врачу.",
+      рост: "Сил на день обычно хватает, но к вечеру запас на себя тает. Стоит приглядеться к тому, что его пополняет." },
+    { имя: "Финансовая опора", кратко: "Финансы", вопрос: "Насколько вы спокойны за финансовую сторону своей жизни?",
+      опора: "Вы спокойны за финансовую сторону жизни — это даёт свободу принимать решения без тревоги.",
+      внимание: "Финансовая сторона пока не даёт спокойствия. Ощущение опоры здесь складывается из ясности и понятных шагов, а не только из суммы.",
+      рост: "Спокойствия за финансовую сторону в целом хватает, но ясности и понятных шагов можно добавить." }
+  ];
+  var ГРУППЫ = [
+    { id: "тело", имя: "Ресурс тела", сферы: [0, 1, 2, 3, 6], кнопка: "Начать с питания", ссылка: "index.html#экран-03",
+      польза: "Начать можно с питания: это самый понятный первый шаг для ресурса тела." },
+    { id: "эмоции", имя: "Эмоциональный комфорт", сферы: [4, 5], кнопка: "Написать Эльвире в MAX", ссылка: MAX,
+      польза: "Можно написать Эльвире и вместе подумать, как укрепить опору." },
+    { id: "деньги", имя: "Финансовая опора", сферы: [7], кнопка: "Написать Эльвире в MAX", ссылка: MAX,
+      польза: "Можно написать Эльвире и обсудить, с каких понятных шагов начать." }
+  ];
+  var значения = [50, 50, 50, 50, 50, 50, 50, 50];
+  var тронуто = [false, false, false, false, false, false, false, false];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var NS = "http://www.w3.org/2000/svg";
+
+  function класс(v) { return v >= 80 ? "опора" : (v >= 60 ? "рост" : "внимание"); }
+
+  /* ---------- анкета ---------- */
+  var ползунки = [], статусы = [];
+  function строимАнкету() {
+    var список = $("кв-список");
+    СФЕРЫ.forEach(function (с, i) {
+      var li = document.createElement("li");
+      li.className = "кв";
+      li.innerHTML = '<p class="кв__сфера"></p><p class="кв__текст" id="в-' + i + '"></p>' +
+        '<input class="ползунок не-тронут" type="range" min="0" max="10" step="1" value="5" id="п-' + i + '">' +
+        '<div class="риски" aria-hidden="true">' + [0,1,2,3,4,5,6,7,8,9,10].map(function (n) { return "<span>" + n + "</span>"; }).join("") + '</div>' +
+        '<div class="края" aria-hidden="true"><span>0 — нет совсем</span><span>10 — полностью, в идеале</span></div>' +
+        '<p class="кв__статус" id="с-' + i + '">Пока не выбрано</p>';
+      li.querySelector(".кв__сфера").textContent = (i + 1) + " · " + с.имя;
+      li.querySelector(".кв__текст").textContent = с.вопрос;
+      var р = li.querySelector("input");
+      р.setAttribute("aria-label", с.имя + ": " + с.вопрос + " Оцените от 0, этого нет совсем, до 10, в идеале");
+      р.addEventListener("input", function () {
+        значения[i] = +р.value * 10; тронуто[i] = true;
+        р.classList.remove("не-тронут"); обновим(i);
+      });
+      ползунки.push(р); статусы.push(li.querySelector(".кв__статус"));
+      список.appendChild(li);
+    });
+  }
+  function обновим(i) {
+    var р = ползунки[i];
+    р.style.setProperty("--v", (р.value * 10) + "%");
+    if (тронуто[i]) { статусы[i].textContent = "Ваша оценка: " + р.value + " из 10"; }
+    var n = тронуто.filter(Boolean).length;
+    $("прогресс-текст").textContent = "Отвечено " + n + " из 8";
+    $("прогресс-полоса").style.width = (n / 8 * 100) + "%";
+    $("собрать").disabled = n < 8;
+  }
+
+  /* ---------- круг ---------- */
+  var cx = 320, cy = 300, R = 200, r0 = 54;
+  function точка(угол, r) { var а = угол * Math.PI / 180; return [cx + Math.sin(а) * r, cy - Math.cos(а) * r]; }
+  function сектор(k, r) {
+    var а1 = k * 45 + 0.8, а2 = (k + 1) * 45 - 0.8, p1 = точка(а1, r), p2 = точка(а2, r);
+    return "M" + cx + " " + cy + " L" + p1[0].toFixed(2) + " " + p1[1].toFixed(2) +
+      " A" + r + " " + r + " 0 0 1 " + p2[0].toFixed(2) + " " + p2[1].toFixed(2) + " Z";
+  }
+  function кривая(v) {
+    var т = v.map(function (x, k) { return точка(k * 45 + 22.5, r0 + (R - r0) * x / 100); });
+    var n = т.length, d = "M" + т[0][0].toFixed(1) + " " + т[0][1].toFixed(1);
+    for (var i = 0; i < n; i++) {
+      var p0 = т[(i - 1 + n) % n], p1 = т[i], p2 = т[(i + 1) % n], p3 = т[(i + 2) % n];
+      var c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+      var c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+      d += " C" + c1[0].toFixed(1) + " " + c1[1].toFixed(1) + "," + c2[0].toFixed(1) + " " + c2[1].toFixed(1) + "," + p2[0].toFixed(1) + " " + p2[1].toFixed(1);
+    }
+    return d + " Z";
+  }
+  /* палитра: для экспорта читаем цвета из переменных страницы */
+  function переменная(имя) {
+    var d = document.createElement("div"); d.style.color = "var(" + имя + ")"; document.body.appendChild(d);
+    var c = getComputedStyle(d).color; document.body.removeChild(d); return c;
+  }
+  /* режим: "живой" — классы и анимация; "файл" — цвета внутри, стили не нужны */
+  var ЦВЕТА = ["#7AB648", "#34AEBF", "#EF7B45", "#4F5FB8", "#A77FD4", "#E0628F", "#F4B92A", "#1F7A55"]; /* цвет сферы по смыслу: зелень · вода · тепло · ночь · мягкость · сердце · солнце · изумруд */
+  var СЛОВАРЬ_ТОН = "#0F3D2E", КРЕМ = "#FFFAF0", ЗОЛОТО = "#C9A24A", ЗОЛОТО_ТЕМНЕЕ = "#A57726";
+  function строимКруг(v, режим) {
+    var pdf = режим === "pdf", файл = режим === "файл" || pdf, П = null;
+    if (файл) { П = { фон: переменная("--цвет-тёмный-фон"), текст: переменная("--цвет-тёмный-текст"), линия: переменная("--цвет-тёплый") }; }
+    var шрифт = файл ? getComputedStyle(document.body).fontFamily.replace(/"/g, "'") : "";
+    var s = '', сдвиг = файл ? 70 : 0;
+    var высота = файл ? 640 : 412;
+    s += '<svg xmlns="' + NS + '" class="круг-свг" viewBox="' + (pdf ? '60 40 520 520' : файл ? '-40 0 720 ' + высота : '60 40 520 520') + '" ' +
+      (pdf ? 'width="1040" height="1040"' : файл ? 'width="1440" height="' + высота * 2 + '"' : 'aria-hidden="true" focusable="false"') + '>';
+    s += '<defs>' +
+      '<radialGradient id="кр-аура"><stop offset="0.88" stop-color="#F3D77A" stop-opacity="0.95"/><stop offset="0.94" stop-color="#F7E3A0" stop-opacity="0.45"/><stop offset="1" stop-color="#F7E3A0" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="кр-ступ"><stop offset="0" stop-color="#FFF3C4"/><stop offset="0.6" stop-color="#E2B23F"/><stop offset="1" stop-color="#B8892A"/></radialGradient>';
+    for (var k = 0; k < 8; k++) { s += '<clipPath id="кл-' + k + '"><path d="' + сектор(k, R + 2) + '"/></clipPath>'; }
+    s += '</defs>';
+    if (файл && !pdf) {
+      s += '<rect x="-40" width="720" height="' + высота + '" fill="' + П.фон + '"/>';
+      s += '<text x="320" y="46" text-anchor="middle" font-family="' + шрифт + '" font-weight="700" font-size="34" fill="' + П.линия + '">Круг ресурсов</text>';
+      s += '<g transform="translate(0,' + (сдвиг - 40) + ')">';
+    }
+    /* сияющая аура вместо обода: мягкое золотое свечение за кругом */
+    s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + (R + 22) + '" fill="url(#кр-аура)"/>';
+    s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" fill="' + КРЕМ + '"/>';
+    /* бледный сектор — «полный круг» цвета своей сферы */
+    for (k = 0; k < 8; k++) {
+      s += '<path d="' + сектор(k, R) + '" class="кр-подложка" fill="' + ЦВЕТА[k] + '" fill-opacity="0.22"/>';
+    }
+    /* сетка делений 1–9: тонкие кольца; десятка — контур идеального круга, яркий */
+    for (var д = 1; д <= 9; д++) {
+      s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r0 + (R - r0) * д / 10) + '" class="кр-деление" fill="none" stroke="' + СЛОВАРЬ_ТОН + '" stroke-width="' + (д === 5 ? 1.4 : 0.8) + '" opacity="' + (д === 5 ? 0.3 : 0.14) + '"/>';
+    }
+    s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" class="кр-идеал" fill="none" stroke="' + ЗОЛОТО + '" stroke-width="3.5"/>';
+    for (var н = 2; н <= 10; н += 2) {
+      var рр = r0 + (R - r0) * н / 10;
+      s += '<text class="кр-шкала" x="' + (cx + 6) + '" y="' + (cy - рр + 5) + '" text-anchor="start" fill="' + ЗОЛОТО_ТЕМНЕЕ + '"' +
+        (файл ? ' font-family="' + шрифт + '" font-weight="700" font-size="15"' : '') + '>' + н + '</text>';
+    }
+    /* заливка: общая плавная область по точкам ответов, раскрашенная по секторам (обрезка клином) — ни острых углов, ни «крыльев» */
+    s += файл ? '<g>' : '<g class="кр-заливка" data-масштаб="1" style="transform:scale(0)">';
+    var обл = кривая(v);
+    for (k = 0; k < 8; k++) {
+      s += '<path d="' + обл + '" clip-path="url(#кл-' + k + ')" class="кр-область" fill="' + ЦВЕТА[k] + '" fill-opacity="0.95"/>';
+    }
+    s += '</g>';
+    s += '<path d="' + обл + '" class="кр-кривая" fill="none" stroke="' + СЛОВАРЬ_ТОН + '" stroke-width="2.5" stroke-linejoin="round"/>';
+    /* белые перегородки между секторами поверх заливки */
+    for (k = 0; k < 8; k++) {
+      var pg = точка(k * 45, R);
+      s += '<line x1="' + cx + '" y1="' + cy + '" x2="' + pg[0].toFixed(1) + '" y2="' + pg[1].toFixed(1) + '" stroke="' + КРЕМ + '" stroke-width="2"/>';
+    }
+    for (k = 0; k < 8; k++) {
+      var rm = r0 + (R - r0) * v[k] / 100, pm = точка(k * 45 + 22.5, rm), знач = v[k] / 10;
+      s += '<circle cx="' + pm[0].toFixed(1) + '" cy="' + pm[1].toFixed(1) + '" r="7" class="кр-метка" fill="' + ЦВЕТА[k] + '" stroke="' + СЛОВАРЬ_ТОН + '" stroke-width="2.5"/>';
+      var pt = точка(k * 45 + 22.5, Math.max(rm - 22, r0 + 14));
+      s += '<text class="кр-значение" x="' + pt[0].toFixed(1) + '" y="' + (pt[1] + 6).toFixed(1) + '" text-anchor="middle" fill="#fff" stroke="' + СЛОВАРЬ_ТОН + '" stroke-width="3" paint-order="stroke"' +
+        (файл ? ' font-family="' + шрифт + '" font-weight="700" font-size="20"' : '') + '>' + знач + '</text>';
+    }
+    s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r0 + '" class="кр-ступица" fill="url(#кр-ступ)" stroke="#FFF3C4" stroke-width="3"/>';
+    /* подписи сфер — тонкие, по дуге вдоль контура своего сектора; нижние перевёрнуты, чтобы читались слева направо */
+    for (k = 0; k < 8; k++) {
+      var м = k * 45 + 22.5, низ = Math.cos(м * Math.PI / 180) < 0, rt = R + 34 + (низ ? 13 : 0);
+      var q1 = точка(м - 21, rt), q2 = точка(м + 21, rt);
+      var путь = низ ? 'M' + q2[0].toFixed(1) + ' ' + q2[1].toFixed(1) + ' A' + rt + ' ' + rt + ' 0 0 0 ' + q1[0].toFixed(1) + ' ' + q1[1].toFixed(1)
+                     : 'M' + q1[0].toFixed(1) + ' ' + q1[1].toFixed(1) + ' A' + rt + ' ' + rt + ' 0 0 1 ' + q2[0].toFixed(1) + ' ' + q2[1].toFixed(1);
+      s += '<path id="кр-п-' + k + '" d="' + путь + '" fill="none"/>';
+      s += '<text class="кр-подпись" text-anchor="middle"' +
+        (файл ? ' font-family="' + шрифт + '" font-weight="400" font-size="17" letter-spacing="2" fill="' + (pdf ? "#12211D" : П.текст) + '" opacity="0.92"' : '') +
+        '><textPath href="#кр-п-' + k + '" startOffset="50%">' + СФЕРЫ[k].кратко + '</textPath></text>';
+    }
+    if (файл && !pdf) { s += '</g><text x="320" y="' + (высота - 22) + '" text-anchor="middle" font-family="' + шрифт + '" font-size="22" fill="' + П.текст + '" opacity="0.8">Эльвира Торунцова · Ресурс жизни</text>'; }
+    return s + '</svg>';
+  }
+
+  /* ---------- результат ---------- */
+  function имяМалое(i) { var т = СФЕРЫ[i].имя; return т.charAt(0).toLowerCase() + т.slice(1); }
+  function заголовок(v) {
+    var mx = Math.max.apply(null, v), mn = Math.min.apply(null, v);
+    if (mx - mn <= 20) { return "Катится ровно"; }
+    var и = [], i;
+    for (i = 0; i < 8; i++) { if (v[i] <= 50) { и.push(i); } }
+    if (!и.length) { for (i = 0; i < 8; i++) { if (v[i] === mn) { и.push(i); } } }
+    return "Спотыкается на: " + и.map(имяМалое).join(", ");
+  }
+  function расшифровка(v) {
+    var инд = v.map(function (x, i) { return i; });
+    var опора = инд.filter(function (i) { return v[i] >= 80; }).sort(function (a, b) { return v[b] - v[a] || a - b; });
+    var рост = инд.filter(function (i) { return v[i] === 60 || v[i] === 70; }).sort(function (a, b) { return v[a] - v[b] || a - b; });
+    var вним = инд.filter(function (i) { return v[i] <= 50; }).sort(function (a, b) { return v[a] - v[b] || a - b; });
+    var н = [["На что вы можете опереться", "опора", опора], ["Что можно укрепить", "рост", рост], ["Что требует внимания и работы", "внимание", вним]];
+    var к = $("расшифровка"); к.innerHTML = "";
+    н.forEach(function (г) {
+      if (!г[2].length) { return; }
+      var d = document.createElement("section"); d.className = "группа группа--" + г[1];
+      var h = document.createElement("h3"); h.textContent = г[0]; d.appendChild(h);
+      var ul = document.createElement("ul");
+      г[2].forEach(function (i) {
+        var li = document.createElement("li"), b = document.createElement("b"), p = document.createElement("p");
+        b.textContent = СФЕРЫ[i].имя; p.textContent = СФЕРЫ[i][г[1]]; li.appendChild(b); li.appendChild(p); ul.appendChild(li);
+      });
+      d.appendChild(ul); к.appendChild(d);
+    });
+  }
+  function строимКарточки(v) {
+    var ми = ГРУППЫ.map(function (г) { return Math.min.apply(null, г.сферы.map(function (i) { return v[i]; })); });
+    var низ = ми.map(function (m) { return m <= 50; });
+    var любоеНизкое = низ.some(Boolean);
+    var мягко = [false, false, false], фраза = ["", "", ""];
+    var все80 = v.every(function (x) { return x >= 80; });
+    var лид = "Три направления — выбирайте то, что откликается.";
+    if (любоеНизкое) { лид = "Судя по вашим ответам, больше всего внимания просит это."; }
+    else if (все80) { мягко[0] = true; фраза[0] = "Поддержать то, что работает."; лид = "Ресурсы в хорошем состоянии — их можно поддерживать."; }
+    else { мягко[0] = true; фраза[0] = "Ресурсы держатся, но запас невелик. Самый понятный первый шаг — питание."; лид = "Ресурсы держатся, но запас невелик."; }
+    var порядок = [0, 1, 2].sort(function (a, b) {
+      var ка = (низ[a] || мягко[a]) ? 0 : 1, кб = (низ[b] || мягко[b]) ? 0 : 1;
+      if (ка !== кб) { return ка - кб; }
+      if (ка === 0 && низ[a] && низ[b]) { return ми[a] - ми[b] || a - b; }
+      return a - b;
+    });
+    $("напр-лид").textContent = лид;
+    var к = $("нк-ряд"); к.innerHTML = "";
+    порядок.forEach(function (gi) {
+      var г = ГРУППЫ[gi], подсв = низ[gi] || мягко[gi];
+      var c = document.createElement("article"); c.className = "нк" + (подсв ? " подсвечена" : "");
+      c.setAttribute("data-группа", г.id);
+      var метка = document.createElement("p"); метка.className = "нк__метка";
+      метка.textContent = низ[gi] ? "Судя по вашим ответам, больше всего внимания просит это" : "";
+      if (метка.textContent) { c.appendChild(метка); }
+      var h = document.createElement("h3"); h.textContent = г.имя; c.appendChild(h);
+      var ul = document.createElement("ul"); ul.className = "нк__сферы";
+      г.сферы.forEach(function (i) {
+        var li = document.createElement("li");
+        li.innerHTML = '<span class="н"></span><div class="полоска"><span class="пол-' + класс(v[i]) + '" style="width:' + v[i] + '%"></span></div>';
+        li.querySelector(".н").textContent = СФЕРЫ[i].имя;
+        ul.appendChild(li);
+      });
+      c.appendChild(ul);
+      var п = document.createElement("p"); п.className = "нк__польза";
+      п.textContent = мягко[gi] && фраза[gi] ? фраза[gi] : г.польза;
+      c.appendChild(п);
+      var a = document.createElement("a"); a.className = "кнопка"; a.href = г.ссылка; a.textContent = г.кнопка;
+      if (г.ссылка.indexOf("http") === 0) { a.target = "_blank"; a.rel = "noopener"; }
+      c.appendChild(a);
+      к.appendChild(c);
+    });
+  }
+  function показатьРезультат() {
+    var v = значения.slice();
+    $("анкета").hidden = true; $("результат").hidden = false;
+    $("р-заголовок").textContent = заголовок(v);
+    $("круг-место").innerHTML = строимКруг(v, "живой");
+    $("легенда").innerHTML = СФЕРЫ.map(function (с, i) { return '<li><i style="background:' + ЦВЕТА[i] + '"></i>' + с.имя + '</li>'; }).join("");
+    расшифровка(v); строимКарточки(v);
+    var свг = $("круг-место").firstChild;
+    var сек = свг.querySelectorAll(".кр-заливка");
+    requestAnimationFrame(function () { requestAnimationFrame(function () {
+      сек.forEach(function (e) { e.style.transform = "scale(" + e.getAttribute("data-масштаб") + ")"; });
+      свг.classList.add("показан");
+    }); });
+    $("р-заголовок").scrollIntoView({ block: "start" });
+    $("р-заголовок").focus({ preventScroll: true });
+  }
+  function назадКОтветам() {
+    $("результат").hidden = true; $("анкета").hidden = false;
+    document.querySelector(".круг-введение").scrollIntoView({ block: "start" });
+  }
+
+  /* ---------- скачивание ---------- */
+  function скачатьPNG() {
+    var svg = строимКруг(значения.slice(), "файл");
+    var img = new Image();
+    img.onload = function () {
+      var c = document.createElement("canvas"); c.width = 1440; c.height = 1280;
+      var x = c.getContext("2d"); x.drawImage(img, 0, 0, 1440, 1280);
+      c.toBlob(function (b) {
+        var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "круг-ресурсов.png";
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+      }, "image/png");
+    };
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+  }
+
+  /* ---------- PDF: настоящий файл, без окна печати. Страницы рисуются на холсте и складываются в PDF (JPEG на страницу) ---------- */
+  function строкиТекста(x, текст, ширина) {
+    var слова = текст.split(" "), строки = [], т = "";
+    слова.forEach(function (с) {
+      var проба = т ? т + " " + с : с;
+      if (x.measureText(проба).width > ширина && т) { строки.push(т); т = с; } else { т = проба; }
+    });
+    if (т) { строки.push(т); }
+    return строки;
+  }
+  function собратьPDF(страницы) {
+    var кодер = new TextEncoder(), части = [], длина = 0, смещения = [];
+    function писать(d) { if (typeof d === "string") { d = кодер.encode(d); } части.push(d); длина += d.length; }
+    function объект(n, тело) { смещения[n] = длина; писать(n + " 0 obj\n"); писать(тело); писать("\nendobj\n"); }
+    var N = страницы.length, W = 595.28, H = 841.89;
+    писать("%PDF-1.4\n");
+    объект(1, "<< /Type /Catalog /Pages 2 0 R >>");
+    var kids = [];
+    for (var i = 0; i < N; i++) { kids.push((3 + i * 3) + " 0 R"); }
+    объект(2, "<< /Type /Pages /Kids [" + kids.join(" ") + "] /Count " + N + " >>");
+    страницы.forEach(function (п, i) {
+      var pn = 3 + i * 3, cn = pn + 1, im = pn + 2;
+      объект(pn, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 " + W + " " + H + "] /Contents " + cn + " 0 R /Resources << /XObject << /Im0 " + im + " 0 R >> >> >>");
+      var поток = "q " + W + " 0 0 " + H + " 0 0 cm /Im0 Do Q";
+      объект(cn, "<< /Length " + поток.length + " >>\nstream\n" + поток + "\nendstream");
+      смещения[im] = длина;
+      писать(im + " 0 obj\n<< /Type /XObject /Subtype /Image /Width " + п.w + " /Height " + п.h + " /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length " + п.байты.length + " >>\nstream\n");
+      писать(п.байты); писать("\nendstream\nendobj\n");
+    });
+    var всего = 3 + N * 3, начало = длина;
+    писать("xref\n0 " + всего + "\n0000000000 65535 f \n");
+    for (var k = 1; k < всего; k++) { писать(("0000000000" + смещения[k]).slice(-10) + " 00000 n \n"); }
+    писать("trailer\n<< /Size " + всего + " /Root 1 0 R >>\nstartxref\n" + начало + "\n%%EOF");
+    return new Blob(части, { type: "application/pdf" });
+  }
+  function скачатьPDF() {
+    var кнопка = $("скачать-pdf"), подпись = кнопка.textContent;
+    кнопка.disabled = true; кнопка.textContent = "Готовлю файл…";
+    var v = значения.slice(), svg = строимКруг(v, "pdf"), img = new Image();
+    var шрифт = getComputedStyle(document.body).fontFamily;
+    var заг = getComputedStyle(document.body).getPropertyValue("--шрифт-заголовков") || шрифт;
+    function сбросить() { кнопка.disabled = false; кнопка.textContent = подпись; }
+    img.onerror = сбросить;
+    img.onload = function () {
+      /* одна страница А4: заголовок, круг без подложки, расшифровка в две колонки; кегль подбирается так, чтобы всё влезло */
+      var PW = 1240, PH = 1754, M = 80, ширина = PW - 2 * M, ТЕМНЫЙ = "#12211D", ЗОЛ = "#8B6113";
+      var c = document.createElement("canvas"); c.width = PW; c.height = PH;
+      var x = c.getContext("2d"); x.textBaseline = "alphabetic";
+      x.fillStyle = "#fff"; x.fillRect(0, 0, PW, PH);
+      var y = M;
+      function шр(вес, размер, семья) { x.font = вес + " " + размер + "px " + (семья || шрифт); }
+      /* заголовок */
+      шр(700, 38, заг); x.fillStyle = ТЕМНЫЙ;
+      строкиТекста(x, $("р-заголовок").textContent, ширина).forEach(function (s) { y += 50; x.fillText(s, M, y - 8); });
+      y += 14;
+      /* круг: квадрат, без подложки */
+      var D = 640; x.drawImage(img, (PW - D) / 2, y, D, D); y += D + 16;
+      /* расшифровка: блоки по группам */
+      var группы = Array.prototype.map.call(document.querySelectorAll("#расшифровка .группа"), function (г) {
+        return { з: г.querySelector("h3").textContent, э: Array.prototype.map.call(г.querySelectorAll("li"), function (li) {
+          return { имя: li.querySelector("b").textContent, т: li.querySelector("p").textContent }; }) };
+      });
+      var низ = PH - M - 50, колШ = (ширина - 50) / 2;
+      function разложить(k, рисовать) {
+        var колонка = 0, cy = y, X = M;
+        function лист(h) { if (cy + h > низ) { if (колонка === 1) { return false; } колонка = 1; cy = y; X = M + колШ + 50; if (cy + h > низ) { return false; } } return true; }
+        for (var gi = 0; gi < группы.length; gi++) {
+          var г = группы[gi], hз = 38 * k;
+          for (var ei = 0; ei < г.э.length; ei++) {
+            var э = г.э[ei];
+            шр(400, 21 * k); var стр = строкиТекста(x, э.т, колШ - 20 * k);
+            var hэ = 30 * k + стр.length * 29 * k + 12 * k;
+            var нужно = hэ + (ei === 0 ? hз + 8 * k : 0);
+            if (!лист(нужно)) { return false; }
+            if (ei === 0) {
+              if (рисовать) { шр(700, 27 * k, заг); x.fillStyle = ЗОЛ; x.fillText(г.з, X, cy + 28 * k); }
+              cy += hз + 8 * k;
+            }
+            if (рисовать) {
+              x.fillStyle = "#D5AB5D"; x.fillRect(X, cy + 4 * k, 4, 24 * k);
+              шр(700, 23 * k, заг); x.fillStyle = ТЕМНЫЙ; x.fillText(э.имя, X + 18 * k, cy + 24 * k);
+              шр(400, 21 * k); x.fillStyle = ТЕМНЫЙ;
+              стр.forEach(function (s, i) { x.fillText(s, X + 18 * k, cy + 30 * k + (i + 1) * 29 * k - 6 * k); });
+            }
+            cy += hэ;
+          }
+          cy += 10 * k;
+        }
+        return true;
+      }
+      var k = 1;
+      while (k > 0.55 && !разложить(k, false)) { k -= 0.05; }
+      разложить(k, true);
+      шр(400, 22); x.fillStyle = "#5C6B63";
+      x.fillText("Круг ресурсов · Эльвира Торунцова, «Ресурс жизни»", M, PH - 40);
+      var b64 = c.toDataURL("image/jpeg", 0.93).split(",")[1], bin = atob(b64), байты = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) { байты[i] = bin.charCodeAt(i); }
+      var blob = собратьPDF([{ w: PW, h: PH, байты: байты }]);
+      var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "круг-ресурсов.pdf";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+      сбросить();
+    };
+    (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(function () {
+      img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+    });
+  }
+
+  строимАнкету();
+  $("собрать").addEventListener("click", показатьРезультат);
+  $("изменить").addEventListener("click", назадКОтветам);
+  $("скачать-png").addEventListener("click", скачатьPNG);
+  $("скачать-pdf").addEventListener("click", скачатьPDF);
+  $("пока-никуда").addEventListener("click", function (e) { e.preventDefault(); $("скачать-png").scrollIntoView({ block: "center" }); $("скачать-png").focus(); });
+})();
+</script>
+</body>
+</html>

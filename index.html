@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ресурс жизни — круг ресурсов и анализ качества питания</title>
+<meta name="description" content="Сил не хватает на всё? Круг ресурсов покажет, на что опереться, а анализ качества питания подскажет первый шаг. Эльвира Торунцова.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Ресурс жизни — круг ресурсов и анализ качества питания">
+<meta property="og:description" content="Сил не хватает на всё? Круг ресурсов покажет, на что опереться, а анализ качества питания подскажет первый шаг. Эльвира Торунцова.">
+<meta property="og:type" content="website">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Эльвира Торунцова",
+  "jobTitle": "Проводник к устойчивой личной опоре",
+  "description": "Я сама пять раз разочаровывалась в разных системах, прежде чем нашла то, что реально работает. Поэтому никого не тороплю — показываю маршрут и жду решения человека.",
+  "sameAs": [
+    "https://max.ru/u/f9LHodD0cOIK4QMBCIWEHFbWmzZUzGsqDQvWKVm6bM0Fuh3gslNf9A-q06k",
+    "https://vk.me/resource_of_life",
+    "https://max.ru/channel_resurs_life_biz"
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;600&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+:root {
+  --шрифт-заголовков: Montserrat, system-ui, sans-serif;
+  --шрифт-текста: Inter, -apple-system, 'Segoe UI', sans-serif;
+  --цвет-фон: #F8F3E8;  --цвет-фон-2: #F3ECDD;  --цвет-фон-карточки: #FFFDF8;
+  --цвет-текст: #12211D;  --цвет-текст-мягкий: #5C6B63;  --цвет-текст-тихий: #8A968F;
+  --цвет-акцент: #F2B33D;  --цвет-акцент-тёмный: #A57726;  --цвет-акцент-яркий: #F2B33D;  --цвет-акцент-глубже: #B15228;  --цвет-акцент-маркер: #A57726;
+  --цвет-на-акценте: #052C23;  --цвет-линия: #D9CBA8;
+  --цвет-тёмный-фон: #052C23;  --цвет-тёмный-фон-2: #04221B;  --цвет-тёмный-текст: #F8F3E8;  --цвет-тёмный-фон-3: #031C16;  --цвет-тёмный-фон-4: #021712;
+  --цвет-тёплый: #F1D297;  --цвет-тёплый-мягкий: #E8D2A5;
+  --цвет-стекло: color-mix(in srgb, #052C23 86%, transparent);
+  --тень: 0 12px 34px color-mix(in srgb, #052C23 6%, transparent);
+  --тень-чип: 0 10px 30px color-mix(in srgb, #052C23 12%, transparent);
+  --тень-глубокая: 0 24px 60px color-mix(in srgb, #052C23 35%, transparent);
+  --тень-спутник: 0 30px 60px color-mix(in srgb, #052C23 70%, transparent);
+  --тень-плиты: 0 40px 100px color-mix(in srgb, #052C23 70%, transparent);
+  --кегль-h1: 30px;  --кегль-h2: clamp(28px, 4.5vw, 44px);
+  --кегль-текст: clamp(18px, 1.5vw, 22px);  --кегль-лид: clamp(19px, 1.9vw, 28px);
+  --кегль-мелкий: 17px;  --кегль-кикер: clamp(17px, 1.3vw, 20px);
+  --кегль-цифра: 30px;  --разрядка-кикера: .03em;
+  --отступ-секции: clamp(56px, 9vw, 120px);  --отступ-блока: clamp(16px, 2vw, 28px);
+  --отступ-секции-тихо: clamp(44px, 7vw, 94px);  --отступ-секции-громко: clamp(64px, 10.5vw, 140px);
+  --ширина: 1280px;  --ширина-колонки: 720px;  --радиус: 16px;  --радиус-малый: 8px;
+  --радиус-карточки: 18px;  --радиус-плитки: 22px;  --радиус-телефон: 46px;  --кнопка-радиус: 14px;
+  --радиус-модуля: 16px;  --нить: 2px;
+  --плавность: cubic-bezier(.2, .7, .2, 1);  --длительность: .25s;
+  --цвет-тёплый-тёмный: #8B6113;
+}
+@media (min-width: 900px) {
+  :root { --кегль-h1: clamp(40px, 4vw, 62px); }
+}
+:root, .светлый { --цвет-кнопки: #B15228; --цвет-на-кнопке: #F8F3E8; --цвет-кнопки-навёл: #904320; }
+.тёмный { --цвет-кнопки: #F2B33D; --цвет-на-кнопке: #052C23; --цвет-кнопки-навёл: var(--цвет-акцент-тёмный); }
+
+</style>
+<script>
+(function () {
+  var ЭТАЛОН = 0.535;                  // очко Open Sans — текстовой гарнитуры утверждённых макетов
+  var ПОТОЛОК = 1.2, МЁРТВАЯ = 0.02;   // выше потолка расползается раскладка; ближе к единице не трогаем вовсе
+  var КОМПЬЮТЕР = "(min-width: 900px)";
+  var ТОКЕНЫ = ["--кегль-текст", "--кегль-лид", "--кегль-мелкий", "--кегль-кикер"];
+  var корень = document.documentElement;
+  var холст = document.createElement("canvas").getContext("2d");
+  var ждём = 0;
+
+  function мера(буква) { var м = холст.measureText(буква); return (м && м.actualBoundingBoxAscent) || 0; }
+
+  function применить() {
+    ждём = 0;
+    if (!холст) { return; }
+
+    for (var i = 0; i < ТОКЕНЫ.length; i++) { корень.style.removeProperty(ТОКЕНЫ[i]); }
+    var стиль = getComputedStyle(корень), стек = стиль.getPropertyValue("--шрифт-текста").trim();
+    if (!стек) { return; }
+    холст.font = "400 100px " + стек;
+
+    var очко = Math.max(мера("х"), мера("x")) / 100;
+    if (!(очко > 0)) { return; }
+    var k = Math.round(Math.min(ПОТОЛОК, Math.max(1, ЭТАЛОН / очко)) * 1000) / 1000;
+    if (k - 1 < МЁРТВАЯ || !matchMedia(КОМПЬЮТЕР).matches) { k = 1; }
+    корень.setAttribute("data-очко", очко.toFixed(3));      // чтобы проверка могла сказать числа вслух
+    корень.setAttribute("data-поправка", k.toFixed(3));
+    if (k === 1) { return; }
+    for (i = 0; i < ТОКЕНЫ.length; i++) {
+      var было = стиль.getPropertyValue(ТОКЕНЫ[i]).trim();
+      if (было) { корень.style.setProperty(ТОКЕНЫ[i], "calc((" + было + ") * " + k + ")"); }
+    }
+  }
+
+  применить();
+
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(применить); }
+
+  addEventListener("resize", function () { ждём = ждём || requestAnimationFrame(применить); });
+})();
+</script>
+</head>
+<body class="с-липкой-кнопкой">
+<style>
+#экран-1 br.м { display: none; }
+@media (min-width: 900px) { #экран-1 .первый-экран__когда { font-size: clamp(14px, 1.15vw, 17px); } }
+@media (max-width: 899px) { #экран-1 br.м { display: inline; }  #экран-1 br.д { display: none; }
+  #экран-1 .картинка--сцена::after, #экран-1 .картинка--сцена::before { display: none; }
+  #экран-1 h1, #экран-1 .лид { position: relative; top: 16px; }
+  #экран-1 .тд { display: none; }
+  #экран-1 .шапка { justify-content: center; }  #экран-1 .шапка__лого { justify-content: center; text-align: center; } }
+#экран-1 .шапка { height: auto; padding-top: clamp(14px, 2.4vw, 34px); }
+#экран-1 .шапка__лого { font-size: clamp(17px, 1.5vw, 25px); white-space: normal; line-height: 1.25; }
+@media (min-width: 900px) { #экран-1 .шапка__лого { white-space: nowrap; flex: none; } }
+#экран-1 .шапка { justify-content: space-between; gap: 2rem; }
+#экран-1 .меню-в { display: flex; align-items: center; gap: clamp(.75rem, 1.5vw, 2.25rem); }
+#экран-1 .меню-в a, #экран-1 .меню-т__панель a { color: var(--цвет-тёмный-текст); text-decoration: none; font: 600 var(--кегль-мелкий)/1.2 var(--шрифт-текста); white-space: nowrap; padding-block: .5rem; border-bottom: 1px solid transparent; transition: color var(--длительность) var(--плавность), border-color var(--длительность) var(--плавность); }
+#экран-1 .меню-в a:hover, #экран-1 .меню-т__панель a:hover { color: var(--цвет-тёплый); border-bottom-color: var(--цвет-тёплый); }
+#экран-1 .меню-т { display: none; }
+@media (max-width: 1179px) {
+  #экран-1 .меню-в { display: none; }
+  #экран-1 .меню-т { display: block; position: absolute; top: clamp(10px, 3vw, 18px); right: 0; z-index: 5; }
+  #экран-1 .меню-т summary { list-style: none; cursor: pointer; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--цвет-тёмный-фон) 70%, transparent); border: 1px solid color-mix(in srgb, var(--цвет-тёплый) 55%, transparent); }
+  #экран-1 .меню-т summary::-webkit-details-marker { display: none; }
+  #экран-1 .меню-т__чёрточки, #экран-1 .меню-т__чёрточки::before, #экран-1 .меню-т__чёрточки::after { content: ""; display: block; width: 18px; height: 2px; background: var(--цвет-тёплый); border-radius: 1px; position: relative; }
+  #экран-1 .меню-т__чёрточки::before { position: absolute; top: -6px; }
+  #экран-1 .меню-т__чёрточки::after { position: absolute; top: 6px; }
+  #экран-1 .меню-т__панель { position: absolute; right: 0; top: 52px; min-width: 14rem; display: grid; padding: .5rem 1.25rem; border-radius: var(--радиус-карточки); background: color-mix(in srgb, var(--цвет-тёмный-фон) 96%, transparent); border: 1px solid color-mix(in srgb, var(--цвет-тёплый) 40%, transparent); box-shadow: var(--тень-глубокая); }
+  #экран-1 .меню-т__панель a { font-size: var(--кегль-текст); padding-block: .75rem; border-bottom: 1px solid color-mix(in srgb, var(--цвет-тёплый) 18%, transparent); }
+  #экран-1 .меню-т__панель a:last-child { border-bottom: 0; }
+}
+</style>
+<section class="блок блок--первый-экран первый-экран--сцена тёмный" id="экран-1" data-тип="первый-экран" data-схема="сцена" data-ключ-макета="тёмная" data-картинка="фото" style="--добор-затемнения: 0; --добор-высветления: .46"><div class="стык стык--низ" aria-hidden="true" style="--стык-сосед: var(--цвет-фон)"></div>
+  <header class="шапка">
+    <a class="шапка__лого" href="#"><span>Ресурс жизни<span class="тд"> · </span><br class="м">Эльвира Торунцова · нутрициолог</span></a>
+    <nav class="меню-в" aria-label="Разделы сайта">
+      <a href="#экран-02">Обо мне</a>
+      <a href="#экран-03">С чего начать</a>
+      <a href="#экран-04">Честно о границах</a>
+      <a href="#экран-05">Вопросы</a>
+      <a href="#экран-06">Контакты</a>
+    </nav>
+    <details class="меню-т">
+      <summary aria-label="Меню"><span class="меню-т__чёрточки" aria-hidden="true"></span></summary>
+      <div class="меню-т__панель">
+        <a href="#экран-02">Обо мне</a>
+        <a href="#экран-03">С чего начать</a>
+        <a href="#экран-04">Честно о границах</a>
+        <a href="#экран-05">Вопросы</a>
+        <a href="#экран-06">Контакты</a>
+      </div>
+    </details>
+  </header>
+  <figure class="картинка картинка--сцена первый-экран__картинка"><picture><source media="(max-width: 899px)" srcset="img/a-scene-telefon.webp"><img src="img/a-scene.webp" alt="Сил на всё не хватает? Ресурс нужно видеть и вовремя пополнять" data-лицо="50,22" fetchpriority="high"></picture></figure>
+  <div class="блок__внутри">
+    <div class="первый-экран__текст">
+      <h1>Сил на всё не хватает?<br>Ресурс нужно видеть<br>и вовремя <em class="акцент">пополнять</em></h1>
+      <p class="лид">Несколько честных ответов себе —<br class="м"> и вы увидите,<br class="д"> на что опираются<br class="м"> и на чём спотыкаются<br> ваши личные ресурсы</p>
+      <div class="первый-экран__действие"><a class="кнопка кнопка--главная" href="круг.html">Увидеть свои ресурсы</a></div>
+      <p class="мелкий первый-экран__когда"><svg class="иконка" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="9"/>
+  <path d="M12 7v5l3.5 2"/>
+</svg> Ответы никуда не отправляются<br> и остаются только у вас</p>
+    </div>
+  </div>
+</section>
+<section class="блок блок--о-себе светлый" id="экран-02" data-тип="о-себе" data-вёрстка="своя"><div class="стык стык--верх" aria-hidden="true" style="--стык-сосед: var(--цвет-тёмный-фон)"></div><div class="стык стык--низ" aria-hidden="true" style="--стык-сосед: var(--цвет-тёмный-фон)"></div>
+<div class="блок__внутри">
+  <div class="разворот">
+    <div class="голова">
+      <p class="кикер">Проводник к вашей опоре</p>
+      <h2>Кто будет рядом, пока вы укрепляете свою опору</h2>
+      <p class="девиз">У каждого своя стартовая ступенька — и рядом тот, кто принимает ваш темп</p>
+    </div>
+    <div class="портрет"><figure class="фото"><img src="img/o-sebe-vyrez.webp" alt="Эльвира Торунцова, нутрициолог" loading="lazy" decoding="async"><figcaption>Эльвира Торунцова · нутрициолог</figcaption></figure></div>
+    <div class="рассказ">
+      <p>Диплом нутрициолога 2023 года дополнил практику организации и контроля качества питания детей. Сегодня этот опыт позволяет мне помогать людям видеть, какая и где проседает опора, и подбирать направление развития и первые безопасные шаги — для каждого индивидуально. Врачебную консультацию это не заменяет: если по ответам видно, что дело серьёзнее образа жизни, об этом говорю прямо</p>
+    </div>
+  </div>
+
+  <div class="основа">
+    <p class="основа__метка">Мой фундамент</p>
+    <ul class="факты">
+      <li class="факт"><b>35 лет в образовании, из которых 24 года на руководящей должности</b><p>сформировали умение объяснять сложное простым языком</p></li>
+      <li class="факт"><b>Организация и контроль качества питания детей</b><p>стали базой для профессии нутрициолога</p></li>
+      <li class="факт"><b>Всесторонняя многолетняя работа с финансами</b><p>научила осознанно выбирать безопасные пути к финансовой опоре</p></li>
+      <li class="факт"><b>Постоянное решение новых задач и развитие в разных направлениях</b><p>позволяют двигаться выверенными шагами и уважать чужой темп, не навязывая свой</p></li>
+    </ul>
+    <ul class="документы">
+      <li class="документ"><svg class="иконка" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="9" r="6"/>
+  <path d="M8.5 14l-2 7 5.5-3 5.5 3-2-7"/>
+</svg><span>Диплом нутрициолога (2023)</span></li>
+      <li class="документ"><svg class="иконка" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M7 3h7l5 5v13H7z"/>
+  <path d="M14 3v5h5M10 13h5M10 17h5"/>
+</svg><span>Сертификат Российского университета дружбы народов «Основы нутрициологии» (2025)</span></li>
+      <li class="документ"><svg class="иконка" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M7 3h7l5 5v13H7z"/>
+  <path d="M14 3v5h5M10 13h5M10 17h5"/>
+</svg><span>Сертификат Nutrilogic.Lite</span></li>
+    </ul>
+  </div>
+</div>
+</section>
+<section class="блок блок--услуги-и-цены блок--громко тёмный" id="экран-03" data-тип="услуги-и-цены" data-вёрстка="своя"><div class="стык стык--верх" aria-hidden="true" style="--стык-сосед: var(--цвет-фон)"></div><div class="стык стык--низ" aria-hidden="true" style="--стык-сосед: var(--цвет-фон)"></div>
+<div class="блок__внутри">
+  <div class="верх">
+  <figure class="фото за-ноутом"><img src="img/za-kompyuterom.webp" alt="Эльвира за ноутбуком: на экране отчёт анализа рациона питания" loading="lazy" decoding="async"></figure>
+  <div class="верх__текст">
+  <div class="секция__шапка секция__шапка--центр">
+    <p class="кикер">Рацион знает, куда уходят ваши силы</p>
+    <h2>Питание и ресурс: с чего начать укреплять опору</h2>
+    <p class="лид секция__лид">Питание в значительной мере определяет ресурсы организма, поэтому анализ рациона — разумный первый шаг</p>
+  </div>
+  <div class="как">
+    <p>Анализ строится на ваших ответах: анкета о питании заполняется в профессиональной системе Nutrilogic Lite после подтверждения согласий на обработку данных. Результат мини-анализа приходит в течение 24 часов на электронную почту, поэтому адрес нужно указывать работающий и без ошибок. Полный анализ рациона питания проводится с двадцатиминутной консультацией, время которой согласуется заранее. Врачебную консультацию анализ не заменяет</p>
+  </div>
+  </div>
+  </div>
+  <ol class="ступени">
+    <li class="ступень">
+      <span class="тариф__метка">Шаг 1</span>
+      <h3>Бесплатный мини-анализ качества рациона питания</h3>
+      <p>вы заполняете анкету и отвечаете на вопросы о своём рационе в профессиональной системе Nutrilogic Lite, ответ приходит на вашу почту в течение 24 часов</p>
+      <a class="кнопка кнопка--контур" href="страница-согласий.html">Получить мини-анализ бесплатно</a>
+    </li>
+    <li class="ступень ступень--главный">
+      <span class="тариф__метка">Шаг 2</span>
+      <h3>Полный анализ рациона питания с двадцатиминутной консультацией</h3>
+      <p>вы заполняете полную анкету о питании в профессиональной системе Nutrilogic Lite, результаты разбираются вместе на консультации, время по согласованию</p>
+      <p class="цена"><b>3 221 ₽</b></p>
+      <a class="кнопка кнопка--главная" href="страница-согласий.html?тип=полный">Записаться на полный анализ рациона</a>
+    </li>
+    <li class="ступень">
+      <span class="тариф__метка">Шаг 3</span>
+      <h3>Бесплатная брошюра «О чём рассказывает рацион питания»</h3>
+      <p>зачем нужен анализ и чем он помогает</p>
+      <span class="скоро">Скоро</span>
+    </li>
+  </ol>
+</div>
+</section>
+<section class="блок блок--условия блок--тихо светлый" id="экран-04" data-тип="условия" data-вёрстка="своя"><div class="стык стык--верх" aria-hidden="true" style="--стык-сосед: var(--цвет-тёмный-фон)"></div><div class="стык стык--низ" aria-hidden="true" style="--стык-сосед: var(--цвет-тёмный-фон)"></div>
+<div class="блок__внутри">
+  <div class="граница">
+    <div class="слово">
+      <p class="кикер">Честно о границах</p>
+      <h2>Кому этот путь не подойдёт</h2>
+      <p class="подзаголовок">Лучше сказать об этом заранее, чем потратить ваше время и силы</p>
+      <p class="текст">Анализ рациона и восполнение ресурсов — это спокойная работа в вашем темпе, без быстрых чудес. Если узнали себя в одном из пунктов ниже, лучше начать с другого шага</p>
+    </div>
+    <ol class="пункты">
+      <li class="пункт"><p>ищете волшебную таблетку или быстрый результат без собственных шагов</p></li>
+      <li class="пункт"><p>ждёте строгий план «просто повторяй» и готовое решение за вас</p></li>
+      <li class="пункт"><p>хотите жёсткую диету или похудение к определённой дате</p></li>
+      <li class="пункт"><p><b>надеетесь заменить лечение диетой или «волшебными» БАДами</b><small>лечит всегда только врач, анализ рациона его не заменяет</small></p></li>
+    </ol>
+  </div>
+</div>
+</section>
+<section class="блок блок--вопросы-ответы блок--тихо тёмный фон--зерно" id="экран-05" data-тип="вопросы-ответы" data-вёрстка="своя"><div class="стык стык--верх" aria-hidden="true" style="--стык-сосед: var(--цвет-фон)"></div><div class="стык стык--низ" aria-hidden="true" style="--стык-сосед: var(--цвет-фон)"></div>
+<div class="блок__внутри">
+  <div class="вопросы-тело">
+    <div class="шапка-в">
+      <p class="кикер">Частые вопросы</p>
+      <h2>Что обычно спрашивают перед первым шагом</h2>
+    </div>
+    <div class="приглашение светлый">
+        <b>Остался вопрос?</b>
+        <p>Напишите Эльвире — ответ придёт в личные сообщения</p>
+        <a class="кнопка кнопка--главная" href="https://max.ru/u/f9LHodD0cOIK4QMBCIWEHFbWmzZUzGsqDQvWKVm6bM0Fuh3gslNf9A-q06k">Написать Эльвире в MAX</a>
+        <a class="кнопка кнопка--контур кнопка--вк" href="https://vk.me/resource_of_life">Написать во ВКонтакте</a>
+    </div>
+    <ol class="список">
+      <li class="реплика"><details><summary><h3>Сколько это стоит?</h3></summary><p>Мини-анализ бесплатный, результат приходит на почту в течение 24 часов. Полный анализ рациона питания с двадцатиминутной консультацией стоит 3 221 ₽. Круг ресурсов и брошюру можно получить бесплатно</p></details></li>
+      <li class="реплика"><details><summary><h3>Как проходит анализ и что нужно сделать?</h3></summary><p>Сначала вы подтверждаете согласия на обработку данных, затем заполняете электронную анкету о питании в программе Nutrilogic Lite. Для анализа качества рациона питания больше ничего покупать не нужно: мини-анализ бесплатный, полный анализ стоит 3 221 ₽. Адрес почты нужно указать работающий и без ошибок. Результаты полного анализа разбираются вместе на консультации</p></details></li>
+      <li class="реплика"><details><summary><h3>Заменяет ли это визит к врачу?</h3></summary><p>Нет. Лечит всегда только врач, анализ рациона его не заменяет. Если по ответам видно, что дело серьёзнее образа жизни, об этом говорится прямо</p></details></li>
+      <li class="реплика"><details><summary><h3>Что будет с моими ответами?</h3></summary><p>Круг ресурсов работает в вашем браузере: ответы никуда не отправляются и остаются только у вас. Анкета о питании заполняется после того, как вы подтвердите согласия на обработку данных</p></details></li>
+      <li class="реплика"><details><summary><h3>Сколько длится консультация и как записаться?</h3></summary><p>Консультация длится двадцать минут, время согласуется заранее. Пока запись такая: кнопка записи, подтверждение согласий, затем сообщение Эльвире в MAX</p></details></li>
+    </ol>
+  </div>
+</div>
+</section>
+<section class="блок блок--контакты блок--тихо светлый фон--зерно" id="экран-06" data-тип="контакты" data-вёрстка="своя"><div class="стык стык--верх" aria-hidden="true" style="--стык-сосед: var(--цвет-тёмный-фон)"></div><div class="стык стык--низ" aria-hidden="true" style="--стык-сосед: var(--цвет-тёмный-фон)"></div>
+<div class="блок__внутри">
+  <div class="шапка-к">
+    <p class="кикер">Контакты</p>
+    <h2>Напишите там, где вам удобно</h2>
+    <p class="подзаголовок">Ответ придёт в личные сообщения в течение 24 часов</p>
+  </div>
+  <ul class="способы">
+    <li class="способ"><a href="https://max.ru/u/f9LHodD0cOIK4QMBCIWEHFbWmzZUzGsqDQvWKVm6bM0Fuh3gslNf9A-q06k"><svg class="иконка" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 5h16v11H9l-5 4z"/>
+</svg><div><b>Написать в MAX</b><span>личные сообщения</span></div><svg class="иконка" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 12h15M13 6l6 6-6 6"/>
+</svg></a></li>
+    <li class="способ"><a href="https://vk.me/resource_of_life"><svg class="иконка" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="9" cy="8" r="3.5"/>
+  <circle cx="17" cy="9" r="2.5"/>
+  <path d="M3 20a6 6 0 0 1 12 0M15 20a4 4 0 0 1 6 0"/>
+</svg><div><b>Написать во ВКонтакте</b><span>vk.ru/resource_of_life</span></div><svg class="иконка" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 12h15M13 6l6 6-6 6"/>
+</svg></a></li>
+  </ul>
+  <div class="главное"><a class="кнопка кнопка--главная" href="https://max.ru/u/f9LHodD0cOIK4QMBCIWEHFbWmzZUzGsqDQvWKVm6bM0Fuh3gslNf9A-q06k">Написать Эльвире в MAX</a></div>
+  <p class="канал">Больше о ресурсах — в канале <a href="https://max.ru/channel_resurs_life_biz">«Ресурс жизни»</a></p>
+</div>
+</section>
+<section class="блок блок--подвал блок--тихо тёмный" id="экран-07" data-тип="подвал" data-вёрстка="своя"><div class="стык стык--верх" aria-hidden="true" style="--стык-сосед: var(--цвет-фон)"></div>
+<div class="блок__внутри">
+  <div class="сетка-п">
+    <div>
+      <span class="знак">Ресурс жизни</span>
+      <div class="реквизиты">
+        <p>Торунцова Эльвира Владимировна</p>
+        <p>самозанятая</p>
+        <p>ИНН 761600561279</p>
+      </div>
+    </div>
+    <div>
+      <h4>Разделы</h4>
+      <div class="разделы-п подвал__разделы">
+        <a href="#экран-02">Обо мне</a>
+        <a href="#экран-03">С чего начать</a>
+        <a href="#экран-04">Честно о границах</a>
+        <a href="#экран-05">Вопросы</a>
+        <a href="#экран-06">Контакты</a>
+      </div>
+    </div>
+    <div>
+      <h4>Документы</h4>
+      <div class="документы-п">
+        <a href="https://disk.yandex.ru/i/cb785ZVVh1nw3Q" target="_blank" rel="noopener">Политика обработки персональных данных</a>
+        <a href="https://disk.yandex.ru/i/7Y8JosKS7e-kNA" target="_blank" rel="noopener">Согласие на обработку персональных данных</a>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<div class="липкая-кнопка липкая-кнопка--тёмная"><a class="кнопка кнопка--главная" href="круг.html">Увидеть свои ресурсы</a></div>
+<script>
+(function () {
+  var СПИТ = "главная-на-виду";                       // класс на body; правило сна — в стилях
+  var кнопка = document.querySelector(".первый-экран__действие .кнопка--главная");
+  if (!кнопка || !window.IntersectionObserver) { return; }
+
+  function пометить(на_виду) { document.body.classList.toggle(СПИТ, !!на_виду); }
+
+  var б = кнопка.getBoundingClientRect();
+  пометить(б.bottom > 0 && б.top < (window.innerHeight || 0));
+
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () { document.body.classList.add("панель-с-переходом"); });
+  });
+
+  new IntersectionObserver(function (записи) {
+    пометить(записи[записи.length - 1].isIntersecting);
+  }, { threshold: 0 }).observe(кнопка);
+})();
+</script>
+</body>
+</html>
