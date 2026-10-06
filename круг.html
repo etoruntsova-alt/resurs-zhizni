@@ -304,7 +304,7 @@
         <p class="после-карточек"><a href="#скачать-png" id="пока-никуда">Пока никуда — сохранить круг и вернуться позже</a></p>
       </div>
 
-      <div class="изменить"><button type="button" class="кнопка кнопка--контур" id="изменить">Изменить ответы</button></div>
+      <div class="изменить"><button type="button" class="кнопка кнопка--контур" id="изменить">Изменить ответы</button> <a class="кнопка кнопка--контур" id="вернуться-на-сайт" href="index.html">Вернуться на сайт</a></div>
     </div>
     </main>
     <div class="круг-подвал">Ресурс жизни · Эльвира Торунцова · нутрициолог</div>
@@ -720,7 +720,15 @@
   $("изменить").addEventListener("click", назадКОтветам);
   $("скачать-png").addEventListener("click", скачатьPNG);
   $("скачать-pdf").addEventListener("click", скачатьPDF);
-  $("пока-никуда").addEventListener("click", function (e) { e.preventDefault(); $("скачать-png").scrollIntoView({ block: "center" }); $("скачать-png").focus(); });
+  // Назад на страницу сайта, с которой человек пришёл; пришёл не с сайта (ссылка, закладка) — на главную.
+  function вернутьсяНаСайт(e) {
+    e.preventDefault();
+    var пришёлССайта = false;
+    try { пришёлССайта = document.referrer && new URL(document.referrer).origin === location.origin && history.length > 1; } catch (_) {}
+    if (пришёлССайта) history.back(); else location.href = "index.html";
+  }
+  $("пока-никуда").addEventListener("click", вернутьсяНаСайт);
+  $("вернуться-на-сайт").addEventListener("click", вернутьсяНаСайт);
 })();
 </script>
 </body>
