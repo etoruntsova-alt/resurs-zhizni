@@ -342,6 +342,24 @@
     </div>
   </div>
 </div>
+
+<script>
+(function () {
+  function прогреть() {
+    var h = document.head, добавить = function (rel, href, как, cors) {
+      var l = document.createElement("link"); l.rel = rel; l.href = href;
+      if (как) { l.as = как; } if (cors) { l.crossOrigin = "anonymous"; }
+      h.appendChild(l);
+    };
+    добавить("preconnect", "https://go.nutrilogic.ru");
+    добавить("preconnect", "https://core1.nutrilogic.ru");
+    добавить("prefetch", "https://go.nutrilogic.ru/static/css/main.1a54ea61.css", "style");
+    добавить("prefetch", "https://go.nutrilogic.ru/static/js/main.cb5e1977.js", "script");
+  }
+  function позже() { setTimeout(прогреть, 1500); }
+  if (document.readyState === "complete") { позже(); } else { window.addEventListener("load", позже); }
+})();
+</script>
 </section>
 
 <style>
