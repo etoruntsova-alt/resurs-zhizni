@@ -271,12 +271,6 @@
       <p class="кикер">Частые вопросы</p>
       <h2>Что обычно спрашивают перед первым шагом</h2>
     </div>
-    <div class="приглашение светлый">
-        <b>Остался вопрос?</b>
-        <p>Напишите Эльвире — ответ придёт в личные сообщения</p>
-        <a class="кнопка кнопка--главная" href="https://max.ru/u/f9LHodD0cOIK4QMBCIWEHFbWmzZUzGsqDQvWKVm6bM0Fuh3gslNf9A-q06k">Написать Эльвире в MAX</a>
-        <a class="кнопка кнопка--контур кнопка--вк" href="https://vk.me/resource_of_life">Написать во ВКонтакте</a>
-    </div>
     <ol class="список">
       <li class="реплика"><details><summary><h3>Сколько это стоит?</h3></summary><p>Мини-анализ бесплатный, результат приходит на почту в течение 24 часов. Полный анализ рациона питания с двадцатиминутной консультацией стоит 3 221 ₽. Круг ресурсов и брошюру можно получить бесплатно</p></details></li>
       <li class="реплика"><details><summary><h3>Как проходит анализ и что нужно сделать?</h3></summary><p>Сначала вы подтверждаете согласия на обработку данных, затем заполняете электронную анкету о питании в программе Nutrilogic Lite. Для анализа качества рациона питания больше ничего покупать не нужно: мини-анализ бесплатный, полный анализ стоит 3 221 ₽. Адрес почты нужно указать работающий и без ошибок. Результаты полного анализа разбираются вместе на консультации</p></details></li>
@@ -284,6 +278,12 @@
       <li class="реплика"><details><summary><h3>Что будет с моими ответами?</h3></summary><p>Круг ресурсов работает в вашем браузере: ответы никуда не отправляются и остаются только у вас. Анкета о питании заполняется после того, как вы подтвердите согласия на обработку данных</p></details></li>
       <li class="реплика"><details><summary><h3>Сколько длится консультация и как записаться?</h3></summary><p>Консультация длится двадцать минут, время согласуется заранее. Пока запись такая: кнопка записи, подтверждение согласий, затем сообщение Эльвире в MAX</p></details></li>
     </ol>
+    <div class="приглашение светлый">
+        <b>Остался вопрос?</b>
+        <p>Напишите Эльвире — ответ придёт в личные сообщения</p>
+        <a class="кнопка кнопка--главная" href="https://max.ru/u/f9LHodD0cOIK4QMBCIWEHFbWmzZUzGsqDQvWKVm6bM0Fuh3gslNf9A-q06k">Написать Эльвире в MAX</a>
+        <a class="кнопка кнопка--контур кнопка--вк" href="https://vk.me/resource_of_life">Написать во ВКонтакте</a>
+    </div>
   </div>
 </div>
 </section>
@@ -429,14 +429,18 @@ body.круг-открыт { overflow: hidden; }
   окно.className = "окно-скана"; окно.hidden = true;
   окно.setAttribute("role", "dialog"); окно.setAttribute("aria-modal", "true");
   окно.innerHTML = '<div class="окно-скана__бар"><span class="окно-скана__подпись"></span><button type="button" aria-label="Закрыть">✕ Закрыть</button></div>' +
-                   '<div class="окно-скана__поле"><img alt="" loading="lazy" decoding="async"></div>';
+                   '<div class="окно-скана__поле"><p class="окно-скана__ждём" style="color:#fff;margin:2rem 1rem;text-align:center">Загружаю документ…</p><img alt="" style="visibility:hidden;position:absolute" loading="lazy" decoding="async"></div>';
   document.body.appendChild(окно);
   var картинка = окно.querySelector("img"), подпись = окно.querySelector(".окно-скана__подпись");
   var закрыватель = окно.querySelector("button"), откуда = null;
 
   function открыть(e) {
     откуда = e.currentTarget;
-    картинка.src = откуда.getAttribute("data-скан");
+    var ждём = окно.querySelector(".окно-скана__ждём"), адрес = откуда.getAttribute("data-скан");
+    ждём.textContent = "Загружаю документ…"; ждём.style.display = ""; картинка.style.cssText = "visibility:hidden;position:absolute";
+    картинка.onload = function () { ждём.style.display = "none"; картинка.style.cssText = ""; };
+    картинка.onerror = function () { ждём.innerHTML = 'Не получилось загрузить. <a style="color:#fff" href="' + адрес + '" target="_blank" rel="noopener">Открыть документ отдельно</a>'; };
+    картинка.src = адрес;
     картинка.alt = откуда.getAttribute("data-подпись") || "Документ";
     подпись.textContent = картинка.alt;
     окно.hidden = false; окно.classList.add("окно-скана--открыто");
