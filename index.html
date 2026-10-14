@@ -357,7 +357,19 @@
     добавить("prefetch", "https://go.nutrilogic.ru/static/css/main.1a54ea61.css", "style");
     добавить("prefetch", "https://go.nutrilogic.ru/static/js/main.cb5e1977.js", "script");
   }
-  function позже() { setTimeout(прогреть, 1500); }
+  // Не отнимаем канал у первого экрана: начинаем, когда человек начал листать/нажимать или через 7 с после загрузки.
+  var сделано = false, события = ["scroll", "touchstart", "pointerdown", "keydown"];
+  function раз() {
+    if (сделано) { return; }
+    сделано = true;
+    события.forEach(function (e) { window.removeEventListener(e, раз); });
+    прогреть();
+  }
+  function позже() {
+    слушать_ввод();
+    setTimeout(раз, 7000);
+  }
+  function слушать_ввод() { события.forEach(function (e) { window.addEventListener(e, раз, { passive: true }); }); }
   if (document.readyState === "complete") { позже(); } else { window.addEventListener("load", позже); }
 })();
 </script>
