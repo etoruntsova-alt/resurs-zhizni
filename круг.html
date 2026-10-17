@@ -732,6 +732,10 @@ html.встроено .круг-шапка { display: none; }
       e.preventDefault();
       window.parent.postMessage({ тип: "закрыть-круг", якорь: a.getAttribute("href").slice("index.html".length) }, location.origin);
     });
+    // Esc, когда фокус внутри круга: родное окно его не слышит, передаём ему.
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { window.parent.postMessage({ тип: "закрыть-круг" }, location.origin); }
+    });
   }
   function вернутьсяНаСайт(e) {
     e.preventDefault();
