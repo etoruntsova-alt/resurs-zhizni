@@ -375,6 +375,26 @@
 </script>
 </section>
 
+<script>
+(function () {
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented || e.button) { return; }
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) { return; }
+    var id = a.getAttribute("href").slice(1);
+    if (!id) { return; }
+    try { id = decodeURIComponent(id); } catch (_) {}
+    var цель = document.getElementById(id);
+    if (!цель) { return; }
+    e.preventDefault();
+    var меню = a.closest("details");
+    if (меню) { меню.open = false; }
+    цель.scrollIntoView();
+    try { history.replaceState(null, "", "#" + id); } catch (_) {}
+  });
+})();
+</script>
+
 <style>
 dialog.окно-круга { padding: 0; margin: auto; border: 1px solid color-mix(in srgb, var(--цвет-тёплый) 30%, transparent); border-radius: 16px; overflow: hidden; color: var(--цвет-тёмный-текст); background: var(--цвет-тёмный-фон); width: min(980px, calc(100vw - 48px)); max-width: none; height: calc(100vh - 48px); height: min(900px, calc(100dvh - 48px)); max-height: none; overscroll-behavior: contain; }
 dialog.окно-круга[open] { display: flex; flex-direction: column; }
