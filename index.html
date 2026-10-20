@@ -242,7 +242,7 @@
       <span class="тариф__метка">Шаг 3</span>
       <h3>Бесплатная брошюра «О чём расскажет ваше питание»</h3>
       <p>зачем нужен анализ и чем он помогает</p>
-      <a class="кнопка кнопка--контур" href="broshyura-o-chem-rasskazhet-pitanie.pdf" download>Скачать брошюру</a>
+      <a class="кнопка кнопка--контур" href="broshyura-o-chem-rasskazhet-pitanie.pdf" download data-брошюра>Скачать брошюру</a>
     </li>
   </ol>
 </div>
@@ -389,7 +389,7 @@ html.круг-открыт { overflow: hidden; scrollbar-gutter: stable; }
 (function () {
   var окно = document.getElementById("окно-круга");
   if (!окно || typeof окно.showModal !== "function" || !window.history || !window.postMessage) { return; }
-  var рамка = null, высота = 0, ждётЯкорь = null, нажатоНаФоне = false;
+  var рамка = null, высота = 0, ждётЯкорь = null, нажатоНаФоне = false, активен = false;
 
   function открыть(e) {
     e.preventDefault();
@@ -400,7 +400,7 @@ html.круг-открыт { overflow: hidden; scrollbar-gutter: stable; }
       рамка.src = "круг.html?встроено=1";
       окно.appendChild(рамка);
     }
-    высота = window.scrollY;
+    высота = window.scrollY; активен = true;
     document.documentElement.classList.add("круг-открыт");
     окно.showModal();
     try { history.pushState({ круг: 1 }, "", location.href); } catch (_) {}
@@ -408,6 +408,8 @@ html.круг-открыт { overflow: hidden; scrollbar-gutter: stable; }
 
   // Окно закрылось (любым способом): страница остаётся там, откуда открыли, либо едет к нужному разделу.
   function завершить() {
+    if (!активен) { return; }
+    активен = false;
     document.documentElement.classList.remove("круг-открыт");
     var якорь = ждётЯкорь; ждётЯкорь = null;
     var цель = якорь ? document.querySelector(якорь) : null;
@@ -442,6 +444,106 @@ html.круг-открыт { overflow: hidden; scrollbar-gutter: stable; }
 
   var ссылки = document.querySelectorAll('a[href="круг.html"]');
   for (var i = 0; i < ссылки.length; i++) { ссылки[i].addEventListener("click", открыть); }
+})();
+</script>
+
+<style>
+dialog.окно-брошюры { padding: 0; margin: auto; border: 1px solid color-mix(in srgb, var(--цвет-тёплый) 30%, transparent); border-radius: 16px; overflow: hidden; color: var(--цвет-тёмный-текст); background: var(--цвет-тёмный-фон); width: min(760px, calc(100vw - 48px)); max-width: none; height: calc(100vh - 48px); height: min(900px, calc(100dvh - 48px)); max-height: none; overscroll-behavior: contain; }
+dialog.окно-брошюры[open] { display: flex; flex-direction: column; }
+dialog.окно-брошюры::backdrop { background: rgba(2, 10, 8, .78); }
+.окно-брошюры__бар { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 8px clamp(12px, 3vw, 24px); background: var(--цвет-тёмный-фон-2); border-bottom: 1px solid color-mix(in srgb, var(--цвет-тёплый) 28%, transparent); }
+.окно-брошюры__название { margin: 0; font-size: 1rem; font-weight: 600; }
+.окно-брошюры__кнопки { display: flex; gap: 8px; }
+.окно-брошюры__бар button { font: inherit; font-weight: 600; cursor: pointer; color: var(--цвет-тёмный-текст); background: transparent; border: 1px solid var(--цвет-тёплый); border-radius: var(--кнопка-радиус); padding: 8px 16px; min-height: 44px; }
+.окно-брошюры__бар button.окно-брошюры__скачать { background: var(--цвет-тёплый); color: var(--цвет-тёмный-фон); }
+.окно-брошюры__бар button:hover, .окно-брошюры__бар button:focus-visible { background: color-mix(in srgb, var(--цвет-тёплый) 22%, transparent); }
+.окно-брошюры__бар button.окно-брошюры__скачать:hover, .окно-брошюры__бар button.окно-брошюры__скачать:focus-visible { background: var(--цвет-тёплый); filter: brightness(1.1); }
+.окно-брошюры__страницы { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; gap: 12px; padding: 12px clamp(8px, 3vw, 24px) 24px; -webkit-overflow-scrolling: touch; }
+.окно-брошюры__страницы img { display: block; width: 100%; height: auto; aspect-ratio: 954 / 1349; border-radius: 6px; background: var(--цвет-фон-карточки); }
+.окно-брошюры__статус { margin: 0; font-size: .95rem; color: var(--цвет-тёплый); width: 100%; }
+@media (max-width: 640px) {
+  dialog.окно-брошюры { width: calc(100vw - 16px); height: calc(100vh - 16px); height: calc(100dvh - 16px); border-radius: 12px; }
+  .окно-брошюры__название { flex: 1 0 100%; }
+  .окно-брошюры__кнопки { flex: 1 0 100%; }
+  .окно-брошюры__кнопки button { flex: 1; padding: 8px 10px; }
+}
+</style>
+<dialog class="окно-брошюры" id="окно-брошюры" aria-label="Брошюра «О чём расскажет ваше питание»">
+  <div class="окно-брошюры__бар">
+    <p class="окно-брошюры__название">Брошюра «О чём расскажет ваше питание»</p>
+    <div class="окно-брошюры__кнопки">
+      <button type="button" class="окно-брошюры__скачать" id="окно-брошюры-скачать">Скачать брошюру</button>
+      <button type="button" id="окно-брошюры-закрыть">Закрыть</button>
+    </div>
+    <p class="окно-брошюры__статус" id="окно-брошюры-статус" role="status" hidden>Брошюра скачивается…</p>
+  </div>
+  <div class="окно-брошюры__страницы" id="окно-брошюры-страницы"></div>
+</dialog>
+<script>
+(function () {
+  var окно = document.getElementById("окно-брошюры");
+  var кнопки = document.querySelectorAll("a[data-брошюра]");
+  if (!окно || !кнопки.length || typeof окно.showModal !== "function" || !window.history) { return; }
+  var поле = document.getElementById("окно-брошюры-страницы"), статус = document.getElementById("окно-брошюры-статус");
+  var адресPdf = кнопки[0].getAttribute("href"), высота = 0, готово = false, таймер = null, активна = false;
+
+  function открыть(e) {
+    e.preventDefault();
+    if (окно.open) { return; }
+    if (!готово) {
+      готово = true;
+      for (var i = 1; i <= 5; i++) {
+        var к = document.createElement("img");
+        к.src = "img/broshyura-" + i + ".webp";
+        к.alt = "Брошюра, страница " + i + " из 5";
+        к.width = 954; к.height = 1349;
+        if (i > 1) { к.loading = "lazy"; }
+        поле.appendChild(к);
+      }
+    }
+    высота = window.scrollY; активна = true;
+    статус.hidden = true;
+    document.documentElement.classList.add("круг-открыт");
+    окно.showModal();
+    поле.scrollTop = 0;
+    window.scrollTo({ top: высота, left: 0, behavior: "instant" });   // браузер при открытии окна может сдвинуть страницу
+    try { history.pushState({ брошюра: 1 }, "", location.href); } catch (_) {}
+  }
+
+  // Окно закрылось любым способом: страница остаётся там, откуда открыли.
+  function завершить() {
+    if (!активна) { return; }
+    активна = false;
+    if (таймер) { clearTimeout(таймер); таймер = null; }
+    document.documentElement.classList.remove("круг-открыт");
+    var назад = function () { window.scrollTo({ top: высота, left: 0, behavior: "instant" }); };
+    назад(); requestAnimationFrame(function () { назад(); setTimeout(назад, 120); });   // после «Назад» браузер сам двигает страницу — возвращаем
+  }
+
+  окно.addEventListener("close", function () {
+    if (history.state && history.state.брошюра) { history.back(); }   // popstate доведёт дело до завершить()
+    else { завершить(); }
+  });
+  window.addEventListener("popstate", function () {
+    if (окно.open) { окно.close(); } else { завершить(); }
+  });
+
+  document.getElementById("окно-брошюры-закрыть").addEventListener("click", function () { окно.close(); });
+  var нажатоНаФоне = false;
+  окно.addEventListener("mousedown", function (e) { нажатоНаФоне = e.target === окно; });
+  окно.addEventListener("click", function (e) { if (e.target === окно && нажатоНаФоне) { окно.close(); } });
+
+  // «Скачать»: файл уходит, на секунду «Брошюра скачивается…», потом окно закрывается.
+  document.getElementById("окно-брошюры-скачать").addEventListener("click", function () {
+    if (таймер) { return; }
+    var а = document.createElement("a");
+    а.href = адресPdf; а.setAttribute("download", ""); а.hidden = true;
+    document.body.appendChild(а); а.click(); document.body.removeChild(а);
+    статус.hidden = false;
+    таймер = setTimeout(function () { таймер = null; if (окно.open) { окно.close(); } }, 1200);
+  });
+
+  for (var i = 0; i < кнопки.length; i++) { кнопки[i].addEventListener("click", открыть); }
 })();
 </script>
 
